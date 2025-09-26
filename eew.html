@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>臺灣地震速報 - 線上</title>
+    <link rel="icon" href="Web/f256x256.png" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" type="text/css" href="Web/eew.css">
+    <!-- <link rel="stylesheet" type="text/css" href="./eew.css"> -->
+    <style>
+        @keyframes WebLoad {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+        body {
+            margin: 0;
+            animation: WebLoad 2s;
+        }
+    </style>
+    <script src='Web/eew.js'></script>
+    <script src='Web/locations.js'></script>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+</head>
+<body>
+    <div id="notification-container"></div>
+    <div id="container">
+        <div id="map">
+            <p class="menu" onclick="openMenu()">☰</p>
+            <div id="sideMenu">
+                <span class="closeBtn" onclick="closeMenu()">&times;</span>
+                <a href="/report" target="_blank">地震報告</a>
+                <a href="/statistics" target="_blank">統計資料</a>
+            </div>
+        </div>
+        <div id="warning-information">
+            <div class="top">
+                <div class="epicenter-table">
+                    <div class="row" style="padding: 0;">
+                        <div style="font-size: 14px; color: red; text-align: center;">注意：離開此頁面可能導致無法接收速報</div>
+                    </div>
+                </div>
+                <div class="epicenter-table">
+                    <div class="row" style="align-items: flex-end; padding: 0;">
+                        <div class="header" style="font-size: 30px;font-weight: bold">設定</div>
+                        <div class="content">
+                            <span id="connectStats" style="color: orange; font-size: 12px;">● 連線中</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="epicenter-table">
+                    <div class="row">
+                        <div class="header">所在地</div>
+                        <div class="content">
+                            <select id="citySelect">
+                                <option value="Taipei" selected>台北市</option>
+                                <option value="NewTaipei">新北市</option>
+                                <option value="Taoyuan">桃園市</option>
+                                <option value="Hsinchu">新竹市(縣)</option>
+                                <option value="Miaoli">苗栗縣</option>
+                                <option value="Taichung">台中市</option>
+                                <option value="Nantou">南投縣</option>
+                                <option value="Changhua">彰化縣</option>
+                                <option value="Yunlin">雲林縣</option>
+                                <option value="Chiayi">嘉義市(縣)</option>
+                                <option value="Tainan">台南市</option>
+                                <option value="Kaohsiung">高雄市</option>
+                                <option value="Pingtung">屏東縣</option>
+                                <option value="Keelung">基隆市</option>
+                                <option value="Yilan">宜蘭縣</option>
+                                <option value="Hualien">花蓮縣</option>
+                                <option value="Taitung">台東縣</option>
+                                <option value="Lianjiang">連江縣</option>
+                                <option value="Kinmen">金門縣</option>
+                                <option value="Penghu">澎湖縣</option>
+                            </select>
+                            <select id="townSelect">
+                                    <option value="" selected>信義區</option>
+                                    <option value="1">松山區</option>
+                                    <option value="2">大安區</option>
+                                    <option value="3">中山區</option>
+                                    <option value="4">中正區</option>
+                                    <option value="5">大同區</option>
+                                    <option value="6">萬華區</option>
+                                    <option value="7">文山區</option>
+                                    <option value="8">南港區</option>
+                                    <option value="9">內湖區</option>
+                                    <option value="10">士林區</option>
+                                    <option value="11">北投區</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="header">預警震度</div>
+                        <div class="content">
+                            <select id="alertLevelSelect">
+                                <option value="0" selected>0 級</option>
+                                <option value="1">1 級</option>
+                                <option value="2">2 級</option>
+                                <option value="3">3 級</option>
+                                <option value="4">4 級</option>
+                                <option value="5">5 弱</option>
+                                <option value="6">5 強</option>
+                                <option value="7">6 弱</option>
+                                <option value="8">6 強</option>
+                                <option value="9">7 級</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="header">P-Alert</div>
+                        <div class="content">
+                            <select id="pAlertSelect">
+                                <option value="True" selected>是</option>
+                                <option value="False">否</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="header">外觀</div>
+                        <div class="content">
+                            <select id="styleSelect" onchange="">
+                                <option value="Light" selected>淺色</option>
+                                <option value="Dark">深色</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="header">音量</div>
+                        <div class="content">
+                            <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="1">
+                        </div>
+                    </div>
+                </div>
+                <div class="epicenter-table">
+                    <div class="row" style="padding: 0;">
+                        <div class="header" style="font-size: 30px;font-weight: bold;color: #333333;">震央</div>
+                        <div class="content" style="display: flex; column-gap: 10px;">
+                            <button id="muteButton" class="warning-button" style="display: none" onclick="mute()">靜音</button>
+                            <button id="replayButton" class="warning-button" style="display:block" onclick="replay()">重現</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="epicenter-table">
+                    <div class="row">
+                        <div class="header">時間</div>
+                        <div class="content" id="timeLabel">{{time}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="header">位置</div>
+                        <div class="content" id="loactionLabel">{{lat}}°N, {{lon}}°E<br>(位於{{address}})</div>
+                    </div>
+                    <div class="row">
+                        <div class="header">深度</div>
+                        <div class="content" id="depthLabel">{{depth}} 公里</div>
+                    </div>
+                    <div class="row">
+                        <div class="header">規模</div>
+                        <div class="content" id="scaleLabel">{{scale}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="header">最大震度</div>
+                        <div class="content" id="maxLevelLabel">{{maxLevel}}</div>
+                    </div>
+                </div>
+                <div class="epicenter-table">
+                    <div class="row" style="padding: 0;">
+                        <div class="header" style="font-size: 30px;font-weight: bold;color: #333333;">所在地</div>
+                    </div>
+                </div>
+                <div class="epicenter-table">
+                    <div class="row">
+                        <div class="header">距震央</div>
+                        <div class="content" id="distanceLabel">- 公里</div>
+                    </div>
+                </div>
+                <div id="warning-location">
+                    <div class="container">
+                        <div class="background">級</div>
+                        <div class="wrapper">
+                            <div class="header">震度</div>
+                            <div class="content">
+                                <div class="value" id="levelLabel"
+                                {% if level == "0" %}
+                                    style="color: black"
+                                {% elif level == "1" %}
+                                    style="color: #99DABB"
+                                {% elif level == "2" %}
+                                    style="color: #4CBE88"
+                                {% elif level == "3" %}
+                                    style="color: #00A355"
+                                {% elif level == "4" %}
+                                    style="color: #F0CC50"
+                                {% elif level == "5-" %}
+                                    style="color: #FB9330"
+                                {% elif level == "5+" %}
+                                    style="color: #F6642C"
+                                {% elif level == "6-" %}
+                                    style="color: #FF1920"
+                                {% elif level == "6+" %}
+                                    style="color: #CE0000"
+                                {% elif level == "7" %}
+                                    style="color: #6E30A1"
+                                {% endif %}
+                                >{{level}}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container">
+                        <div class="background">秒</div>
+                        <div class="wrapper">
+                            <div class="header">抵達</div>
+                            <div class="content">
+                                <div class="value" id="secondLabel">{{second}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <span class="foot">本服務使用音效係由「地牛Wake Up!」授權使用</span>
+                <br>
+                <span class="foot">Copyrights &copy; 2024-2025, Chang Yu-Hsi. All rights reserved.</span>
+                <div class="epicenter-table">
+                    <div class="row">
+                        <a href="https://linktr.ee/tw.earthquake" target="_blank">社群連結</a>
+                        <a href="/about" target="_blank">關於地震速報</a>
+                        <a href="https://payment.opay.tw/Broadcaster/Donate/797FE1FD0B7B33C6BE4F216DC2901A01" target="_blank">贊助我們</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="legend">
+        <div id="warning-legend">
+            <div class="legend-column" style="width:48px;">
+                <div style="margin-bottom:1px">震度</div>
+                <div class="legend-intensity">
+                    <div class="row"><div class="cell"><span class="color i7"></span></div><div class="cell" style="padding-left:3px">7</div></div>
+                    <div class="row"><div class="cell"><span class="color i6s"></span></div><div class="cell" style="padding-left:3px">6+</div></div>
+                    <div class="row"><div class="cell"><span class="color i6w"></span></div><div class="cell" style="padding-left:3px">6-</div></div>
+                    <div class="row"><div class="cell"><span class="color i5s"></span></div><div class="cell" style="padding-left:3px">5+</div></div>
+                    <div class="row"><div class="cell"><span class="color i5w"></span></div><div class="cell" style="padding-left:3px">5-</div></div>
+                    <div class="row"><div class="cell"><span class="color i4"></span></div><div class="cell" style="padding-left:3px">4</div></div>
+                    <div class="row"><div class="cell"><span class="color i3"></span></div><div class="cell" style="padding-left:3px">3</div></div>
+                    <div class="row"><div class="cell"><span class="color i2"></span></div><div class="cell" style="padding-left:3px">2</div></div>
+                    <div class="row"><div class="cell"><span class="color i1"></span></div><div class="cell" style="padding-left:3px">1</div></div>
+                    <div class="row"><div class="cell"><span class="color i0"></span></div><div class="cell" style="padding-left:3px">0</div></div>
+                </div>
+            </div>
+            <div class="legend-column" style="width:55px;">
+                <div style="margin-bottom:1px">震央</div>
+                <div class="legend-intensity">
+                    <img src="./Web/cross.png" height="24" width="24">
+                </div>
+                <div style="margin-bottom:1px">所在地</div>
+                <div class="legend-intensity">
+                    <img src="https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png" width="24">
+                </div>
+            </div>
+            <div class="legend-column" style="width:80px;">
+                <div style="margin-bottom:1px">預估波高</div>
+                <div class="legend-intensity">
+                    <div class="row"><div class="cell"><span class="color i7"></span></div><div class="cell" style="padding-left:3px">>6</div></div>
+                    <div class="row"><div class="cell"><span class="color i6w"></span></div><div class="cell" style="padding-left:3px">3~6</div></div>
+                    <div class="row"><div class="cell"><span class="color i5s"></span></div><div class="cell" style="padding-left:3px">1~3</div></div>
+                    <div class="row"><div class="cell"><span class="color i4"></span></div><div class="cell" style="padding-left:3px">0.3~1</div></div>
+                    <div class="row"><div class="cell"><span class="color i3"></span></div><div class="cell" style="padding-left:3px"><0.3</div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const map = L.map('map', {
+            center: [24, 120.9605],
+            zoom: 7.5,
+            dragging: false,
+            scrollWheelZoom: false,
+            doubleClickZoom: false,
+            zoomControl: false,
+            keyboard: false,
+            boxZoom: false,
+            attributionControl: false
+        });
+
+        const darkLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png', {
+            attribution: '',
+            subdomains: 'abcd',
+            maxZoom: 19
+        });
+
+        const lightLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
+            attribution: '',
+            subdomains: 'abcd',
+            maxZoom: 19
+        });
+
+        lightLayer.addTo(map);
+        
+        let eqData = JSON.parse('{{ data|safe }}');
+
+        updateMarker({{lat}}, {{lon}});
+
+        // const apiUrl = "http://127.0.0.1:8080/eew";
+        const apiUrl = `${window.location.href}eew`;
+        
+        const center = [{{lat}}, {{lon}}];
+    </script>
+</body>
+<script>
+    function openMenu() {
+        document.getElementById("sideMenu").style.width = "250px";
+    }
+    function closeMenu() {
+        document.getElementById("sideMenu").style.width = "0";
+    }
+</script>
+</html>
