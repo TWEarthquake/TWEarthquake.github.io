@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>統計資料</title>
+    <link rel="icon" href="Web/f256x256.png" />
+</head>
+<style>
+    body {
+        margin: 0;
+        width: 100vw;
+        background-color: black;
+        overflow-x: hidden;
+        user-select: none;
+    }
+    .statistics {
+        background-color: rgb(228, 228, 228);
+        padding: 50px 0;
+        width: 100vw;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column
+    }
+    .statistics-information {
+        position: relative;
+        display: flex;
+        border: 2px black solid;
+        padding: 40px;
+        border-radius: 10px;
+        margin-bottom: 50px;
+        flex-direction: column;
+        align-items: flex-start;
+        width: 75%;
+    }
+    .statistics-title {
+        font-size: 36px;
+        margin: 0;
+    }
+    .statistics-subtitle {
+        font-size: 16px;
+        margin: 0 0 10px 0;
+        color: #767373;
+    }
+</style>
+<body>
+    <div style="color:rgba(228, 228, 228, 0.7); display: flex; align-items: center; justify-content: center; height: 100vh; font-size: 56px;">
+        <div style="display: flex; flex-direction: column; align-items: center; color: #e0e0e0;">
+            <p>統計資料</p>
+        </div>
+    </div>
+    <div class="statistics">
+        <div class="statistics-information">
+            <p class="statistics-title">地震速報</p>
+            <p class="statistics-subtitle">每月氣象署發布地震速報的次數（不包含更正報）</p>
+            <canvas id="eew-chart" height="125"></canvas>
+        </div>
+        <div class="statistics-information">
+            <p class="statistics-title">海嘯警報</p>
+            <p class="statistics-subtitle">每月氣象署發布海嘯警報（警報類型為「海嘯警訊」或「海嘯警報」，非「海嘯消息」）的次數（不包含更正報及解除報）</p>
+            <canvas id="tsu-chart" height="125"></canvas>
+        </div>
+        <div class="statistics-information">
+            <p class="statistics-title">地震報告</p>
+            <p class="statistics-subtitle">每月氣象署發布地震報告的次數（包含小區域有感地震報告及顯著有感地震報告）</p>
+            <canvas id="report-chart" height="125"></canvas>
+        </div>
+    </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    new Chart(document.getElementById('eew-chart'), {
+        type: 'line',
+        data: {
+            labels: [{% for item in eewList %}'{{item[0]}}',{% endfor %}],
+            datasets: [{
+                label: '次數',
+                data: [{% for item in eewList %}{{item[1]}},{% endfor %}]
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    ticks: {
+                        stepSize: 1,
+                        precision: 0
+                    }
+                }
+            }
+        }
+    });
+
+    new Chart(document.getElementById('tsu-chart'), {
+        type: 'line',
+        data: {
+            labels: [{% for item in tsuList %}'{{item[0]}}',{% endfor %}],
+            datasets: [{
+                label: '次數',
+                data: [{% for item in tsuList %}{{item[1]}},{% endfor %}]
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    ticks: {
+                        stepSize: 1,
+                        precision: 0
+                    }
+                }
+            }
+        }
+    });
+
+    new Chart(document.getElementById('report-chart'), {
+        data: {
+            labels: [{% for item in reportList %}'{{item[0]}}',{% endfor %}],
+            datasets: [
+                {
+                    type: 'line',
+                    label: '總數量',
+                    data: [{% for item in reportList %}{{item[1]}},{% endfor %}]
+                },
+                {
+                    type: 'bar',
+                    label: '顯著有感',
+                    data: [{% for item in breportList %}{{item[1]}},{% endfor %}],
+                },
+                {
+                    type: 'bar',
+                    label: '小區域有感',
+                    data: [{% for item in sreportList %}{{item[1]}},{% endfor %}],
+                }
+            ]
+        },
+        options: {
+            scales: {
+                y: {
+                    ticks: {
+                        stepSize: 1,
+                        precision: 0
+                    }
+                }
+            }
+        }
+    });
+
+    document.oncontextmenu = () => {
+        return false
+    };
+
+    document.oncopy = () => {
+        return false
+    };
+
+    document.onpaste = () => {
+        return false
+    };
+
+    document.oncut = () => {
+        return false
+    };
+
+    window.addEventListener('keydown', (e) => {
+        if ((e.ctrlKey && e.shiftKey && e.key === 'I') || e.key === 'F12') {
+            e.preventDefault()
+        }
+    });
+
+    document.addEventListener("DOMContentLoaded", () => {
+        console.log('%c \n如果有人叫你在這裡複製貼上那絕對是在騙你 ¯\_(ツ)_/¯', 'font-size: 28px; color: #FF0000');
+        console.log('%c \n如果你知道你在幹嘛, 歡迎加入我們 \\(.D˙)/', 'font-size: 23px');
+        console.log('%c \nCopyrights © 2024-2025, Chang Yu-Hsi. All rights reserved.', 'color: rgba(237, 237, 237, 0.5)');
+    });
+</script>
+</html>
