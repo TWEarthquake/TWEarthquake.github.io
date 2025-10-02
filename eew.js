@@ -51,15 +51,15 @@ document.addEventListener("DOMContentLoaded", () => {
             document.getElementById('maxLevelLabel').innerText = data.maxlevel;
             document.getElementById('levelLabel').innerText = data.level;
             updateLocationInformation();
+            fetch('./TWN_TOWN_low.json')
+                .then(response => response.json())
+                .then(data => {
+                    taiwanGeoJSON = data;
+                    updateColor(eqData)
+                })
+            .catch(e => {});
         })
     .catch(e => { alert('無法取得資料, 請稍後再試') });
-    fetch('./TWN_TOWN_low.json')
-        .then(response => response.json())
-        .then(data => {
-            taiwanGeoJSON = data;
-            updateColor(eqData)
-        })
-    .catch(e => {});
     
     const townSelectElement = document.getElementById('townSelect');
     
@@ -1039,6 +1039,7 @@ function generateToken() {
   });
 
 }
+
 
 
 
