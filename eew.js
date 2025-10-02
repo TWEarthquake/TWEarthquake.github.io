@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log('%c \n如果你知道你在幹嘛, 歡迎加入我們 \\(.D˙)/', 'font-size: 23px');
     console.log('%c \nCopyrights © 2024-2025, Chang Yu-Hsi. All rights reserved.', 'color: rgba(237, 237, 237, 0.5)');
     alert('使用前請詳閱「關於地震速報」(連結位於頁面右下角)，如繼續使用，即視為了解且同意該頁面內容。\n\n注意：離開此頁面可能導致無法接收速報');
-    fetch('https://twearthquake.zapto.org:30007/api/web/initialization')
+    fetch('http://twearthquake.zapto.org:30006/api/web/initialization')
         .then(response => response.json())
         .then(data => {
             apiUrl = data.url;
@@ -229,7 +229,7 @@ const soundFiles = [
 
 window.onload = () => {
     soundFiles.forEach((file) => {
-        const audio = new Audio(`./Web/audio/${file}.mp3`);
+        const audio = new Audio(`./audio/${file}.mp3`);
         soundCache[file] = audio;
     });
 };
@@ -1037,4 +1037,5 @@ function generateToken() {
     const hex = Array.from(new Uint8Array(signature)).map(b => b.toString(16).padStart(2, '0')).join('');
     return { ts, sign: hex };
   });
+
 }
