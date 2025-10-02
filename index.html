@@ -147,23 +147,23 @@
                 <div class="epicenter-table">
                     <div class="row">
                         <div class="header">時間</div>
-                        <div class="content" id="timeLabel">{{time}}</div>
+                        <div class="content" id="timeLabel">N/A</div>
                     </div>
                     <div class="row">
                         <div class="header">位置</div>
-                        <div class="content" id="loactionLabel">{{lat}}°N, {{lon}}°E<br>(位於{{address}})</div>
+                        <div class="content" id="loactionLabel">N/A°N, N/A°E<br>(位於N/A)</div>
                     </div>
                     <div class="row">
                         <div class="header">深度</div>
-                        <div class="content" id="depthLabel">{{depth}} 公里</div>
+                        <div class="content" id="depthLabel">N/A 公里</div>
                     </div>
                     <div class="row">
                         <div class="header">規模</div>
-                        <div class="content" id="scaleLabel">{{scale}}</div>
+                        <div class="content" id="scaleLabel">N/A</div>
                     </div>
                     <div class="row">
                         <div class="header">最大震度</div>
-                        <div class="content" id="maxLevelLabel">{{maxLevel}}</div>
+                        <div class="content" id="maxLevelLabel">N/A</div>
                     </div>
                 </div>
                 <div class="epicenter-table">
@@ -205,7 +205,7 @@
                                 {% elif level == "7" %}
                                     style="color: #6E30A1"
                                 {% endif %}
-                                >{{level}}</div>
+                                >N/A</div>
                             </div>
                         </div>
                     </div>
@@ -214,7 +214,7 @@
                         <div class="wrapper">
                             <div class="header">抵達</div>
                             <div class="content">
-                                <div class="value" id="secondLabel">{{second}}</div>
+                                <div class="value" id="secondLabel">0</div>
                             </div>
                         </div>
                     </div>
@@ -297,15 +297,6 @@
         });
 
         lightLayer.addTo(map);
-        
-        let eqData = JSON.parse('{{ data|safe }}');
-
-        updateMarker({{lat}}, {{lon}});
-
-        // const apiUrl = "http://127.0.0.1:8080/eew";
-        const apiUrl = `${window.location.href}eew`;
-        
-        const center = [{{lat}}, {{lon}}];
     </script>
 </body>
 <script>
@@ -317,6 +308,7 @@
     }
 </script>
 </html>
+
 
 
 
