@@ -70,80 +70,85 @@
 </body>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    new Chart(document.getElementById('eew-chart'), {
-        type: 'line',
-        data: {
-            labels: [{% for item in eewList %}'{{item[0]}}',{% endfor %}],
-            datasets: [{
-                label: '次數',
-                data: [{% for item in eewList %}{{item[1]}},{% endfor %}]
-            }]
-        },
-        options: {
-            scales: {
-                y: {
-                    ticks: {
-                        stepSize: 1,
-                        precision: 0
-                    }
-                }
-            }
-        }
-    });
-
-    new Chart(document.getElementById('tsu-chart'), {
-        type: 'line',
-        data: {
-            labels: [{% for item in tsuList %}'{{item[0]}}',{% endfor %}],
-            datasets: [{
-                label: '次數',
-                data: [{% for item in tsuList %}{{item[1]}},{% endfor %}]
-            }]
-        },
-        options: {
-            scales: {
-                y: {
-                    ticks: {
-                        stepSize: 1,
-                        precision: 0
-                    }
-                }
-            }
-        }
-    });
-
-    new Chart(document.getElementById('report-chart'), {
-        data: {
-            labels: [{% for item in reportList %}'{{item[0]}}',{% endfor %}],
-            datasets: [
-                {
-                    type: 'line',
-                    label: '總數量',
-                    data: [{% for item in reportList %}{{item[1]}},{% endfor %}]
+    fetch('https://twearthquake.zapto.org:30007/api/statistics')
+        .then(response => response.json())
+        .then(data => {
+            new Chart(document.getElementById('eew-chart'), {
+                type: 'line',
+                data: {
+                    labels: data.eewList.map(item => item[0]),
+                    datasets: [{
+                        label: '次數',
+                        data: data.eewList.map(item => item[1])
+                    }]
                 },
-                {
-                    type: 'bar',
-                    label: '顯著有感',
-                    data: [{% for item in breportList %}{{item[1]}},{% endfor %}],
-                },
-                {
-                    type: 'bar',
-                    label: '小區域有感',
-                    data: [{% for item in sreportList %}{{item[1]}},{% endfor %}],
-                }
-            ]
-        },
-        options: {
-            scales: {
-                y: {
-                    ticks: {
-                        stepSize: 1,
-                        precision: 0
+                options: {
+                    scales: {
+                        y: {
+                            ticks: {
+                                stepSize: 1,
+                                precision: 0
+                            }
+                        }
                     }
                 }
-            }
-        }
-    });
+            });
+
+            new Chart(document.getElementById('tsu-chart'), {
+                type: 'line',
+                data: {
+                    labels: data.tsuList.map(item => item[0]),
+                    datasets: [{
+                        label: '次數',
+                        data: data.tsuList.map(item => item[1])
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            ticks: {
+                                stepSize: 1,
+                                precision: 0
+                            }
+                        }
+                    }
+                }
+            });
+
+            new Chart(document.getElementById('report-chart'), {
+                data: {
+                    labels: data.reportList.map(item => item[0]),
+                    datasets: [
+                        {
+                            type: 'line',
+                            label: '總數量',
+                            data: data.reportList.map(item => item[1])
+                        },
+                        {
+                            type: 'bar',
+                            label: '顯著有感',
+                            data: data.breportList.map(item => item[1]),
+                        },
+                        {
+                            type: 'bar',
+                            label: '小區域有感',
+                            data: data.sreportList.map(item => item[1]),
+                        }
+                    ]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            ticks: {
+                                stepSize: 1,
+                                precision: 0
+                            }
+                        }
+                    }
+                }
+            });
+        })
+    .catch(e => { alert('無法取得資料, 請稍後再試', e) });
 
     document.oncontextmenu = () => {
         return false
