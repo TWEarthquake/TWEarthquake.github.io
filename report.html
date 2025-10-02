@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>地震報告</title>
-    <link rel="icon" href="Web/f256x256.png" />
+    <link rel="icon" href="./f256x256.png" />
 </head>
 <style>
     body {
@@ -163,7 +163,7 @@
 
     function handleImageError(imgElement) {
         imgElement.onerror = null;
-        imgElement.src = 'Web/noImage.png';
+        imgElement.src = './noImage.png';
 
         const wrapper = imgElement.closest('.report-img');
         if (wrapper) {
@@ -206,4 +206,5 @@
         console.log('%c \nCopyrights © 2024-2025, Chang Yu-Hsi. All rights reserved.', 'color: rgba(237, 237, 237, 0.5)');
     });
 </script>
+
 </html>
