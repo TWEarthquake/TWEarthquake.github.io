@@ -256,7 +256,7 @@ window.addEventListener('keydown', (e) => {
     }
 });
 
-const audio = new Audio('Web/audio/test.ogg');
+const audio = new Audio('./audio/test.ogg');
 audio.play().then(() => {}).catch((e) => {
     alert(`請根據以下步驟，允許網站播放音效：
 Chrome：
@@ -1039,3 +1039,4 @@ function generateToken() {
   });
 
 }
+
