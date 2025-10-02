@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>地震報告</title>
+    <link rel="icon" href="Web/f256x256.png" />
+</head>
+<style>
+    body {
+        margin: 0;
+        width: 100vw;
+        background-color: black;
+        overflow-x: hidden;
+        user-select: none;
+    }
+
+    .report {
+        background-color: rgb(228, 228, 228);
+        padding: 50px 0;
+        width: 100vw;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column
+    }
+
+    .report-information {
+        width: 65%;
+        position: relative;
+        display: flex;
+        border: 2px black solid;
+        padding: 40px;
+        border-radius: 10px;
+        margin-bottom: 50px;
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .report-img {
+        margin-right: 40px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .report-title {
+        font-size: 22px;
+        font-weight: bold;
+        color: red;
+    }
+
+    .report-content {
+        font-size: 17px;
+    }
+
+    .report-level {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        color: white;
+        font-size: 36px;
+        padding: 10px 10px;
+        padding-top: 15px;
+        border-radius: 5px;
+        width: 50px;
+        height: 50px;
+        text-align: center;
+    }
+
+    a {
+        display: inline-block;
+        background-color: #1e88e5;
+        color: white;
+        padding: 6px 12px;
+        font-size: 14px;
+        border-radius: 4px;
+        text-decoration: none;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        transition: background-color 0.3s;
+        text-align: center;
+        margin-top: 10px;
+    }
+
+    a:hover {
+        background-color: #1565c0;
+    }
+</style>
+<body>
+    <div style="color:rgba(228, 228, 228, 0.7); display: flex; align-items: center; justify-content: center; height: 100vh; font-size: 56px;">
+        <div style="display: flex; flex-direction: column; align-items: center; color: #e0e0e0;">
+            <p>地震報告</p>
+        </div>
+    </div>
+    <div class="report"></div>
+</body>
+<script>
+    const levelColors = {
+           "0": "black",
+           "1": "#99DABB",
+           "2": "#4CBE88",
+           "3": "#00A355",
+           "4": "#fcd64b",
+          "5-": "#fb9536",
+          "5+": "#fe520f",
+          "6-": "#ce0000",
+          "6+": "#ad00f1",
+           "7": "#6E30A1",
+           "I": "#F4F9FF",
+          "II": "#BFCCFF",
+         "III": "#9999FF",
+          "IV": "#80FFFF",
+           "V": "#7DF894",
+          "VI": "yellow",
+         "VII": "#FFC800",
+        "VIII": "#FF9100",
+          "IX": "red",
+           "X": "#C80000",
+          "XI": "#800000",
+         "XII": "#400000"
+    };
+
+    fetch('https://twearthquake.zapto.org:30007/api/web/report')
+        .then(response => response.json())
+        .then(data => {
+            const container = document.getElementsByClassName("report");
+            data.data.forEach(item => {
+                console.log(item)
+                const reportDiv = document.createElement("div");
+                reportDiv.className = "report-information";
+
+                reportDiv.innerHTML = `
+                <div class="report-img">
+                    <img src="${item.im}" width="400px" onerror="handleImageError(this)">
+                    <div>
+                    <a href="${item.im}" target="_blank">點我看大圖</a>
+                    </div>
+                </div>
+                <div style="margin-right: 50px; border-left: 2px black solid; padding-left: 40px;">
+                    <div class="report-title">${item.na}</div>
+                    <div class="report-content">時間：${item.ti}</div>
+                    <div class="report-content">位置：${item.la}°N, ${item.lo}°E</div>
+                    <div class="report-content">即在：${item.ad}</div>
+                    <div class="report-content">地震深度：${item.de} 公里</div>
+                    <div class="report-content">
+                    ${item.na === "海外地震" ? "規模" : "芮氏規模"}：${item.sc}
+                    </div>
+                    <br>
+                    ${Object.entries(item.ar).map(([level, region]) => `
+                    <div class="report-content" style="font-weight: bold;">${level}</div>
+                    <div class="report-content">${region}</div>
+                    `).join("")}
+                </div>
+                <div class="report-level" style="background-color: ${levelColors[item.ml] || 'gray'}">
+                    ${item.ml}
+                </div>
+                `;
+
+                container[0].appendChild(reportDiv);
+            });
+        })
+    .catch(e => { alert('無法取得資料, 請稍後再試');console.log(e) });
+
+    function handleImageError(imgElement) {
+        imgElement.onerror = null;
+        imgElement.src = 'Web/noImage.png';
+
+        const wrapper = imgElement.closest('.report-img');
+        if (wrapper) {
+            const link = wrapper.querySelector('a');
+            if (link) {
+                link.removeAttribute('href');
+
+                link.style.pointerEvents = 'none';
+                link.style.opacity = '0.5';
+                link.innerText = '無法顯示大圖';
+            }
+        }
+    }
+
+    document.oncontextmenu = () => {
+        return false
+    };
+
+    document.oncopy = () => {
+        return false
+    };
+
+    document.onpaste = () => {
+        return false
+    };
+
+    document.oncut = () => {
+        return false
+    };
+
+    window.addEventListener('keydown', (e) => {
+        if ((e.ctrlKey && e.shiftKey && e.key === 'I') || e.key === 'F12') {
+            e.preventDefault()
+        }
+    });
+
+    document.addEventListener("DOMContentLoaded", () => {
+        console.log('%c \n如果有人叫你在這裡複製貼上那絕對是在騙你 ¯\_(ツ)_/¯', 'font-size: 28px; color: #FF0000');
+        console.log('%c \n如果你知道你在幹嘛, 歡迎加入我們 \\(.D˙)/', 'font-size: 23px');
+        console.log('%c \nCopyrights © 2024-2025, Chang Yu-Hsi. All rights reserved.', 'color: rgba(237, 237, 237, 0.5)');
+    });
+</script>
+</html>
