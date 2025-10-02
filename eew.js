@@ -674,7 +674,7 @@ function updateMarker(lat, lon) {
     }
 
     const customIcon = L.icon({
-        iconUrl: './Web/cross.png',
+        iconUrl: './cross.png',
         iconSize: [30, 30],
         iconAnchor: [15, 15]
     });
@@ -756,7 +756,7 @@ const tsunamiColors = {
     '大於6公尺': '#6E30A1'
 };
 function updateTsunami(tsunamiData) {
-    fetch('Web/tsunami.json')
+    fetch('./tsunami.json')
         .then(response => response.json())
         .then(geojsonData => {
             geojsonData.features.forEach(feature => {
@@ -1039,6 +1039,7 @@ function generateToken() {
   });
 
 }
+
 
 
 
