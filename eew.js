@@ -29,6 +29,7 @@ let lightMode = true;
 let locationEng = 'Taipei';
 let currentVolume = 1;
 let apiUrl = '';
+let hasInit = false;
 
 document.addEventListener("DOMContentLoaded", () => {
     console.log('%c \n如果有人叫你在這裡複製貼上那絕對是在騙你 ¯\_(ツ)_/¯', 'font-size: 28px; color: #FF0000');
@@ -38,6 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
     fetch('https://twearthquake.zapto.org:30007/api/web/initialization')
         .then(response => response.json())
         .then(data => {
+            hasInit = true;
             apiUrl = data.url;
             eqData = JSON.parse(data.data);
             document.getElementById('timeLabel').innerText = data.time;
@@ -55,14 +57,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 .then(response => response.json())
                 .then(data => {
                     taiwanGeoJSON = data;
-                    updateColor(eqData)
+                    updateColor(eqData);
                 })
             .catch(e => {});
         })
     .catch(e => { alert('無法取得資料, 請稍後再試') });
     
     const townSelectElement = document.getElementById('townSelect');
-    
     
     document.getElementById('citySelect').addEventListener("change", (e) => {
         locationEng = e.target.value
@@ -306,6 +307,7 @@ const lonStep = 0.17;
 
 let hasTsunami = false;
 setInterval(() => {
+    if (!hasInit) return;
     const townSelectElement = document.getElementById('townSelect');
     fetchWithTimeout(apiUrl + `/${locationEng}${townSelectElement.value}`, 1000)
     .then(({data, responseTime}) => {
@@ -1039,6 +1041,7 @@ function generateToken() {
   });
 
 }
+
 
 
 
