@@ -143,7 +143,7 @@
                     <div class="report-content">即在：${item.ad}</div>
                     <div class="report-content">地震深度：${item.de} 公里</div>
                     <div class="report-content">
-                    ${item.na === "海外地震" ? "規模" : "芮氏規模"}：${item.sc}
+                    ${item.na === "海外地震" ? "規模" : "芮氏規模"}：${item.sc.toFixed(1)}
                     </div>
                     <br>
                     ${Object.entries(item.ar).map(([level, region]) => `
@@ -208,4 +208,5 @@
 </script>
 
 </html>
+
 
