@@ -751,6 +751,7 @@ function updateRectangle(lat, lon, text = '') {
 
 let tsunami = [];
 const tsunamiColors = {
+    'N': '#4e8cff',
     '小於0.3公尺': '#00a355',
     '0.3至1公尺': '#fcd64b',
     '1至3公尺': '#fe520f', 
@@ -767,7 +768,7 @@ function updateTsunami(tsunamiData) {
                 if (data) {
                     const coords = feature.geometry.coordinates[0];
                     const latlngs = coords.map(c => [c[1], c[0]]);
-                    const color = tsunamiColors[data.WaveHeight] || '#00a355';
+                    const color = tsunamiColors[data.WaveHeight] || '#4e8cff';
 
                     const line = L.polyline(latlngs, {
                         color: color,
@@ -1041,6 +1042,7 @@ function generateToken() {
   });
 
 }
+
 
 
 
