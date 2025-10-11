@@ -291,11 +291,12 @@ function getColorByPGA(pga) {
     else return 'white';
 }
 
-let lastReportText = ''
-let pgaCircles = []
-let lastMaxPGA = 0
+let lastReportText = '';
+let lastTsuText = '';
+let pgaCircles = [];
+let lastMaxPGA = 0;
 let gridSquares = [];
-let center = []
+let center = [];
 
 const latMin = 21.70;
 const latMax = 25.30;
@@ -597,10 +598,11 @@ setInterval(() => {
 
         // tsunami
         if (data.HasTsunami) {
-            if (!hasTsunami) {
+            const tsunami = data.tsunamiData;
+            if (!hasTsunami || lastTsuText != tsunami.ReportContent) {
                 hasTsunami = true;
 
-                const tsunami = data.tsunamiData;
+                lastTsuText = tsunami.ReportContent;
                 // Notification
                 showNotification(tsunami.ReportContent.replace('。', '。\n'), 60000);
                 // Sound
@@ -759,6 +761,8 @@ const tsunamiColors = {
     '大於6公尺': '#6E30A1'
 };
 function updateTsunami(tsunamiData) {
+    tsunami.forEach(r => map.removeLayer(r));
+    tsunami = [];
     fetch('./tsunami.json')
         .then(response => response.json())
         .then(geojsonData => {
@@ -1042,6 +1046,7 @@ function generateToken() {
   });
 
 }
+
 
 
 
