@@ -73,6 +73,8 @@
     fetch('https://twearthquake.zapto.org:30007/api/statistics')
         .then(response => response.json())
         .then(data => {
+            var sum = data.eewList.map(item => item[1]).reduce((a, b) => a + b, 0);
+            var avg = data.eewList.map(item => item[1]).length > 0 ? sum / data.eewList.map(item => item[1]).length : 0;
             new Chart(document.getElementById('eew-chart'), {
                 type: 'line',
                 data: {
@@ -80,6 +82,10 @@
                     datasets: [{
                         label: '次數',
                         data: data.eewList.map(item => item[1])
+                    },
+                    {
+                        label: '平均值',
+                        data: Array(data.eewList.map(item => item[1]).length).fill(Math.round(avg))
                     }]
                 },
                 options: {
@@ -94,6 +100,8 @@
                 }
             });
 
+            var sum = data.tsuList.map(item => item[1]).reduce((a, b) => a + b, 0);
+            var avg = data.tsuList.map(item => item[1]).length > 0 ? sum / data.tsuList.map(item => item[1]).length : 0;
             new Chart(document.getElementById('tsu-chart'), {
                 type: 'line',
                 data: {
@@ -101,6 +109,10 @@
                     datasets: [{
                         label: '次數',
                         data: data.tsuList.map(item => item[1])
+                    },
+                    {
+                        label: '平均值',
+                        data: Array(data.tsuList.map(item => item[1]).length).fill(Math.round(avg))
                     }]
                 },
                 options: {
@@ -115,6 +127,8 @@
                 }
             });
 
+            var sum = data.reportList.map(item => item[1]).reduce((a, b) => a + b, 0);
+            var avg = data.reportList.map(item => item[1]).length > 0 ? sum / data.reportList.map(item => item[1]).length : 0;
             new Chart(document.getElementById('report-chart'), {
                 data: {
                     labels: data.reportList.map(item => item[0]),
@@ -123,6 +137,11 @@
                             type: 'line',
                             label: '總數量',
                             data: data.reportList.map(item => item[1])
+                        },
+                        {
+                            type: 'line',
+                            label: '平均值',
+                            data: Array(data.reportList.map(item => item[1]).length).fill(Math.round(avg))
                         },
                         {
                             type: 'bar',
@@ -180,6 +199,7 @@
 </script>
 
 </html>
+
 
 
 
