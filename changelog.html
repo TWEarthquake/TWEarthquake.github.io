@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>更新日誌</title>
+  <link rel="icon" href="./f256x256.png" />
+  <style>
+    body {
+      font-family: "Inter", "Noto Sans TC", sans-serif;
+      background-color: rgb(228, 228, 228);
+      color: #1e293b;
+      margin: 0;
+      padding: 40px;
+      display: flex;
+      justify-content: center;
+      user-select: none;
+    }
+
+    .version-container {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+      padding: 32px;
+      max-width: 600px;
+      width: 100%;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .header h2 {
+      margin-bottom: 8px;
+      font-size: 1.5rem;
+    }
+
+    .legend {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      font-size: 0.9rem;
+      color: #64748b;
+      flex-wrap: wrap;
+    }
+
+    .legend span::before {
+      content: '';
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-right: 6px;
+    }
+
+    .N::before { background: #3b82f6; }
+    .U::before { background: #f59e0b; }
+    .D::before { background: #0ea5e9; }
+    .F::before { background: #f97316; }
+    .R::before { background: #ef4444; }
+    .O::before { background: #94a3b8; }
+
+    .version-card {
+      background: #f9fafb;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .version-card h3 {
+      margin: 0;
+      font-size: 1.2rem;
+    }
+
+    .release-date {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      background: #e2e8f0;
+      color: #475569;
+      font-size: 0.8rem;
+      padding: 4px 10px;
+      border-radius: 9999px;
+    }
+
+    .version-list {
+      list-style: none;
+      margin: 16px 0 0;
+      padding: 0;
+    }
+
+    .version-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      margin-bottom: 8px;
+      line-height: 1.5;
+    }
+
+    .tag {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      color: white;
+      font-weight: bold;
+      font-size: 0.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .tag.D { background-color: #0ea5e9; }
+    .tag.F { background-color: #f97316; }
+    .tag.N { background-color: #3b82f6; }
+    .tag.U { background-color: #f59e0b; }
+    .tag.R { background-color: #ef4444; }
+    .tag.O { background-color: #94a3b8; }
+  </style>
+</head>
+<body>
+  <div class="version-container">
+    <div class="header">
+      <h2>更新日誌</h2>
+      <div class="legend">
+        
+        <span class="N">N = 新增</span>
+        <span class="U">U = 更新</span>
+        <span class="F">F = 修復</span>
+        <span class="R">R = 移除</span>
+        <span class="O">O = 其他</span>
+      </div>
+    </div>
+
+    <div class="version-card">
+      <h3>1.9.3</h3>
+      <span class="release-date">發布於 2025-11-??</span>
+      <ul class="version-list">
+        <li><span class="tag N">N</span>新增多項顯示設定</li>
+        <li><span class="tag N">N</span>新增預設主題</li>
+        <li><span class="tag F">F</span>修復了部分已知問題</li>
+      </ul>
+    </div>
+    <div class="version-card">
+      <h3>1.9.2</h3>
+      <span class="release-date">發布於 2025-11-05</span>
+      <ul class="version-list">
+        <li><span class="tag F">F</span>修復了部分已知問題</li>
+      </ul>
+    </div>
+    <div class="version-card">
+      <h3>1.9.1</h3>
+      <span class="release-date">發布於 2025-11-04</span>
+      <ul class="version-list">
+        <li><span class="tag F">F</span>修復了部分已知問題</li>
+      </ul>
+    </div>
+    <div class="version-card">
+      <h3>1.9</h3>
+      <span class="release-date">發布於 2025-11-02</span>
+      <ul class="version-list">
+          <li><span class="tag N">N</span>新增「統計」頁面</li>
+          <li><span class="tag N">N</span>新增「外觀設定」頁面，可自訂背景顏色、文字顏色及按鈕顏色</li>
+          <li><span class="tag N">N</span>全新的地震報告頁面</li>
+          <li><span class="tag N">N</span>新增「通知跳轉」功能</li>
+          <li><span class="tag N">N</span>地震報告詳情頁可上一頁或下一頁</li>
+          <li><span class="tag U">U</span>調整部分UI</li>
+          <li><span class="tag U">U</span>調整動態島、即時動態的顏色配置</li>
+          <li><span class="tag R">R</span>移除「家庭連動」功能</li>
+        </ul>
+    </div>
+    <div class="version-card">
+      <h3>1.8</h3>
+      <span class="release-date">發布於 2025-10-19</span>
+      <ul class="version-list">
+          <li><span class="tag N">N</span>新增「海嘯警報」</li>
+          <li><span class="tag N">N</span>新增海嘯警報相關設定及音效</li>
+          <li><span class="tag N">N</span>新增支援「靈動島」</li>
+          <li><span class="tag N">N</span>主頁地圖新增「圖例」</li>
+          <li><span class="tag N">N</span>主頁地圖將顯示更多資訊</li>
+          <li><span class="tag N">N</span>新增許多「地圖設定」選項</li>
+          <li><span class="tag N">N</span>地震報告頁面新增「海外地震」，將顯示為藍色</li>
+          <li><span class="tag N">N</span>新增啟動畫面</li>
+          <li><span class="tag U">U</span>更新P-alert相關音效</li>
+          <li><span class="tag U">U</span>更新各震度顏色</li>
+          <li><span class="tag F">F</span>(應該)修復了定位失敗導致的崩潰問題</li>
+        </ul>
+    </div>
+    <div class="version-card">
+      <h3>1.7.2</h3>
+      <span class="release-date">發布於 2025-05-18</span>
+      <ul class="version-list">
+          <li><span class="tag F">F</span>再次修復閃退問題</li>
+        </ul>
+    </div>
+    <div class="version-card">
+      <h3>1.7.1</h3>
+      <span class="release-date">發布於 2025-05-14</span>
+      <ul class="version-list">
+          <li><span class="tag F">F</span>修復了特定地區開啟後會閃退的問題</li>
+        </ul>
+    </div>
+    <div class="version-card">
+      <h3>1.7</h3>
+      <span class="release-date">發布於 2025-02-18</span>
+      <ul class="version-list">
+          <li><span class="tag N">N</span>新增鄉鎮地區預警</li>
+        </ul>
+    </div>
+    <div class="version-card">
+      <h3>1.6.4</h3>
+      <span class="release-date">發布於 2024-11-27</span>
+      <ul class="version-list">
+          <li><span class="tag N">N</span>新增「P-Alert」頁面</li>
+          <li><span class="tag N">N</span>新增標示P-Alert地圖中最大值位置</li>
+          <li><span class="tag N">N</span>於「通知設定」中新增「P-Alert警報」選項</li>
+        </ul>
+    </div>
+    <div class="version-card">
+      <h3>1.6.3</h3>
+      <span class="release-date">發布於 2024-11-23</span>
+      <ul class="version-list">
+          <li><span class="tag N">N</span>新增「Real-Time MT」資訊</li>
+          <li><span class="tag N">N</span>新增「天氣」頁面顏色說明</li>
+          <li><span class="tag N">N</span>新增「P-Alert」相關字串、音效(相關功能將於未來開放)</li>
+        </ul>
+    </div>
+    <div class="version-card">
+      <h3>1.6.2</h3>
+      <span class="release-date">發布於 2024-11-16</span>
+      <ul class="version-list">
+          <li><span class="tag N">N</span>新增「雷達回波」資訊</li>
+          <li><span class="tag N">N</span>新增「閃電回波」資訊</li>
+          <li><span class="tag N">N</span>新增主畫面地圖縣市邊線</li>
+          <li><span class="tag U">U</span>「降雨」頁面地圖自動放大至使用者位置</li>
+          <li><span class="tag U">U</span>地震報告改由內嵌瀏覽器開啟</li>
+          <li><span class="tag U">U</span>「天氣」頁面視覺化</li>
+        </ul>
+    </div>
+    <div class="version-card">
+      <h3>1.6.1</h3>
+      <span class="release-date">發布於 2024-11-11</span>
+      <ul class="version-list">
+          <li><span class="tag F">F</span>修復定位問題</li>
+        </ul>
+    </div>
+    <div class="version-card">
+      <h3>1.6</h3>
+      <span class="release-date">發布於 2024-11-09</span>
+      <ul class="version-list">
+          <li><span class="tag N">N</span>新增廣告，將由「重現」功能觸發</li>
+          <li><span class="tag N">N</span>新增自動螢幕錄影功能</li>
+          <li><span class="tag N">N</span>新增「地圖」設定，包含：是否顯示P波、平滑震波、平滑等級</li>
+          <li><span class="tag U">U</span>將「重要提示」的音量設定設為獨立選項</li>
+          <li><span class="tag U">U</span>降雨預警區域視覺化</li>
+          <li><span class="tag F">F</span>修復由背景模式切回APP時無法自動更新定位問題</li>
+        </ul>
+    </div>
+    <div class="version-card">
+      <h3>1.5.2</h3>
+      <span class="release-date">發布於 2024-10-28</span>
+      <ul class="version-list">
+          <li><span class="tag F">F</span>修復閃退問題</li>
+        </ul>
+    </div>
+    <div class="version-card">
+      <h3>1.5.1</h3>
+      <span class="release-date">發布於 2024-10-27</span>
+      <ul class="version-list">
+          <li><span class="tag N">N</span>新增版本檢測</li>
+          <li><span class="tag R">R</span>移除部分APP預覽</li>
+        </ul>
+    </div>
+    <div class="version-card">
+      <h3>1.5</h3>
+      <span class="release-date">發布於 2024-10-21</span>
+      <ul class="version-list">
+          <li><span class="tag N">N</span>新增顯示P波</li>
+          <li><span class="tag N">N</span>新增音訊可以在背景模式下播放</li>
+          <li><span class="tag N">N</span>新增「天氣資訊」頁面</li>
+          <li><span class="tag U">U</span>優化主頁面溫度顯示</li>
+          <li><span class="tag R">R</span>移除「地震儀」頁面</li>
+        </ul>
+    </div>
+    <div class="version-card">
+      <h3>1.4.5</h3>
+      <span class="release-date">發布於 2024-09-17</span>
+      <ul class="version-list">
+          <li><span class="tag N">N</span>新增「音效測試」頁面</li>
+          <li><span class="tag N">N</span>新增震動模式</li>
+          <li><span class="tag N">N</span>新增於主頁面顯示目前氣溫及空氣品質（使用國家測站資料，絕非民間公司所推出的API）</li>
+          <li><span class="tag U">U</span>更新使用條款，新增英文翻譯</li>
+          <li><span class="tag F">F</span>修正震度為0級時文字變白色的問題</li>
+          <li><span class="tag F">F</span>修正「重現按鈕」邊框顯示問題</li>
+          <li><span class="tag F">F</span>修正開啟APP時同步邏輯</li>
+        </ul>
+    </div>
+    <div class="version-card">
+      <h3>1.4.4</h3>
+      <span class="release-date">發布於 2024-08-27</span>
+      <ul class="version-list">
+          <li><span class="tag N">N</span>更詳細的地震資訊</li>
+          <li><span class="tag N">N</span>加入些許動畫效果</li>
+        </ul>
+    </div>
+    <div class="version-card">
+      <h3>1.4.3</h3>
+      <span class="release-date">發布於 2024-08-24</span>
+      <ul class="version-list">
+          <li><span class="tag N">N</span>新增「重現」功能</li>
+          <li><span class="tag N">N</span>新增「地震報告」頁面</li>
+          <li><span class="tag R">R</span>移除「模擬觸發」功能</li>
+          <li><span class="tag R">R</span>移除「歷史警報」頁面</li>
+        </ul>
+    </div>
+    <div class="version-card">
+      <h3>1.4.2</h3>
+      <span class="release-date">發布於 2024-07-14</span>
+      <ul class="version-list">
+          <li><span class="tag F">F</span>修復iOS 16.4以下更改降雨接收地區時會閃退的問題</li>
+        </ul>
+    </div>
+    <div class="version-card">
+      <h3>1.4.1</h3>
+      <span class="release-date">發布於 2024-07-06</span>
+      <ul class="version-list">
+          <li><span class="tag F">F</span>修復了一些閃退問題</li>
+        </ul>
+    </div>
+    <div class="version-card">
+      <h3>1.4</h3>
+      <span class="release-date">發布於 2024-07-05</span>
+      <ul class="version-list">
+          <li><span class="tag N">N</span>新增撥放震度功能，能於通知音效中播放震度，讓您在第一時間就知道地震震度</li>
+          <li><span class="tag N">N</span>新增「降雨」頁面</li>
+          <li><span class="tag N">N</span>新增降雨通知，如果您的所在地在未來一小時內可能會發生大雨，應用程式將提前通知您，讓您做好準備</li>
+          <li><span class="tag U">U</span>優化主頁面地圖圓圈顯示方式</li>
+        </ul>
+    </div>
+    <div class="version-card">
+      <h3>1.3.1</h3>
+      <span class="release-date">發布於 2024-06-26</span>
+      <ul class="version-list">
+          <li><span class="tag N">N</span>支援iOS 15</li>
+          <li><span class="tag F">F</span>修正音量設定顯示問題</li>
+          <li><span class="tag F">F</span>修正同步狀態顯示問題</li>
+        </ul>
+    </div>
+    <div class="version-card">
+      <h3>1.3</h3>
+      <span class="release-date">發布於 2024-06-22</span>
+      <ul class="version-list">
+          <li><span class="tag N">N</span>新增設定「重要提示」音量選項，且可以針對各個震度進行設定</li>
+          <li><span class="tag N">N</span>新增接收地震報告的選項，可單獨選擇接收小區域有感地震報告或顯著有感地震報告，也可以兩者皆接收</li>
+          <li><span class="tag N">N</span>新增伺服器同步狀態顯示</li>
+          <li><span class="tag N">N</span>新增複製識別碼功能</li>
+          <li><span class="tag N">N</span>新增「更新報」、「女聲」音效</li>
+          <li><span class="tag U">U</span>部分UI微調</li>
+        </ul>
+    </div>
+    <div class="version-card">
+      <h3>1.2</h3>
+      <span class="release-date">發布於 2024-06-13</span>
+      <ul class="version-list">
+          <li><span class="tag U">U</span>提升了「歷史警報」頁面加載速度</li>
+          <li><span class="tag U">U</span>改善了偵測所在地變化的邏輯</li>
+          <li><span class="tag F">F</span>修復了一些UI問題</li>
+          <li><span class="tag F">F</span>修復了在某些情況下設定檔會毀損導致閃退問題</li>
+          <li><span class="tag F">F</span>修復了沒有網路連線時進入「歷史警報」頁面會閃退的問題</li>
+        </ul>
+    </div>
+    <div class="version-card">
+      <h3>1.1</h3>
+      <span class="release-date">發布於 2024-06-01</span>
+      <ul class="version-list">
+          <li><span class="tag N">N</span>增加偵測所在地變更功能：在開啟APP時會自動判斷您的所在地是否與設定值一致</li>
+          <li><span class="tag U">U</span>提升開啟APP時與伺服器同步資料的速度</li>
+        </ul>
+    </div>
+    <div class="version-card">
+      <h3>1.0</h3>
+      <span class="release-date">發布於 2024-??-??</span>
+      <ul class="version-list">
+          <li><span class="tag N">N</span>APP誕生了</li>
+        </ul>
+    </div>
+  </div>
+</body>
+<script>
+    document.oncontextmenu = () => {
+        return false
+    };
+
+    document.oncopy = () => {
+        return false
+    };
+
+    document.onpaste = () => {
+        return false
+    };
+
+    document.oncut = () => {
+        return false
+    };
+
+    window.addEventListener('keydown', (e) => {
+        if ((e.ctrlKey && e.shiftKey && e.key === 'I') || e.key === 'F12') {
+            e.preventDefault()
+        }
+    });
+
+    document.addEventListener("DOMContentLoaded", () => {
+        console.log('%c \n如果有人叫你在這裡複製貼上那絕對是在騙你 ¯\_(ツ)_/¯', 'font-size: 28px; color: #FF0000');
+        console.log('%c \n如果你知道你在幹嘛, 歡迎加入我們 \\(.D˙)/', 'font-size: 23px');
+        console.log('%c \nCopyrights © 2024-2025, Chang Yu-Hsi. All rights reserved.', 'color: rgba(237, 237, 237, 0.5)');
+    });
+</script>
+</html>
