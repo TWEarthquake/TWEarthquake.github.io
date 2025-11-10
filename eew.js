@@ -394,41 +394,37 @@ setInterval(() => {
             const PWaveDistance = getDistance(maxLocation.lat, maxLocation.lon, station.lat, station.lon);
             const initialRadius = PWaveDistance * 500;
 
-            if (circle_palert) {
-                map.removeLayer(circle_palert);
-                map.removeLayer(Pcircle_palert);
-                clearInterval(timer_palert);
+            if (!circle_palert) {
+                Pcircle_palert = L.circle([maxLocation.lat, maxLocation.lon], {
+                    radius: initialRadius * 2,
+                    color: lightMode ? 'black' : 'white',
+                    weight: 2,
+                    fillOpacity: 0
+                }).addTo(map);
+
+                circle_palert = L.circle([maxLocation.lat, maxLocation.lon], {
+                    radius: initialRadius,
+                    color: getColorByPGA(pAlertData.Max),
+                    fillColor: getColorByPGA(pAlertData.Max),
+                    fillOpacity: 0.3,
+                    weight: 2
+                }).addTo(map);
+
+                let currentRadius = initialRadius;
+                const interval = 25;
+                const updateRadius = () => {
+                    currentRadius += (3500 * (interval / 1000));
+                    Pcircle_palert.setRadius(currentRadius * 2);
+                    circle_palert.setRadius(currentRadius);
+
+                    if (currentRadius > 445000) {
+                        map.removeLayer(circle_palert);
+                        map.removeLayer(Pcircle_palert);
+                        clearInterval(timer_palert);
+                    }
+                };
+                timer_palert = setInterval(updateRadius, interval);
             }
-
-            Pcircle_palert = L.circle([maxLocation.lat, maxLocation.lon], {
-                radius: initialRadius * 2,
-                color: lightMode ? 'black' : 'white',
-                weight: 2,
-                fillOpacity: 0
-            }).addTo(map);
-
-            circle_palert = L.circle([maxLocation.lat, maxLocation.lon], {
-                radius: initialRadius,
-                color: getColorByPGA(pAlertData.Max),
-                fillColor: getColorByPGA(pAlertData.Max),
-                fillOpacity: 0.3,
-                weight: 2
-            }).addTo(map);
-
-            let currentRadius = initialRadius;
-            const interval = 25;
-            const updateRadius = () => {
-                currentRadius += (3500 * (interval / 1000));
-                Pcircle_palert.setRadius(currentRadius * 2);
-                circle_palert.setRadius(currentRadius);
-
-                if (currentRadius > 445000) {
-                    map.removeLayer(circle_palert);
-                    map.removeLayer(Pcircle_palert);
-                    clearInterval(timer_palert);
-                }
-            };
-            timer_palert = setInterval(updateRadius, interval);
             // Sound
             if (pAlert && pAlertData.Max > lastMaxPGA) {
                 if (pAlertData.Max >= 80 && lastMaxPGA < 80) {
@@ -461,6 +457,8 @@ setInterval(() => {
         }
         else {
             lastMaxPGA = 0;
+            circle_palert = null
+            Pcircle_palert = null
         }
 
         // Report
@@ -1092,4 +1090,5 @@ function generateToken() {
     return { ts, sign: hex };
   });
 }
+
 
