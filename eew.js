@@ -386,7 +386,7 @@ setInterval(() => {
         // P-Alert Notification
         if (data.HasPAlert) {
             // Circle animation
-            const activateStation = Object.entries(data.PGAs)
+            const activateStation = Object.entries(pAlertData.PGAs)
                 .filter(([_, info]) => info.pga > 2.5);
             const [_, station] = activateStation.reduce((min, cur) =>
                 cur[1].pga < min[1].pga ? cur : min
@@ -1092,3 +1092,4 @@ function generateToken() {
     return { ts, sign: hex };
   });
 }
+
