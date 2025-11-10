@@ -394,7 +394,7 @@ setInterval(() => {
             const PWaveDistance = getDistance(maxLocation.lat, maxLocation.lon, station.lat, station.lon);
             const initialRadius = PWaveDistance * 500;
 
-            if (!circle_palert) {
+            if (!circle_palert && shouldPlayAlert) {
                 Pcircle_palert = L.circle([maxLocation.lat, maxLocation.lon], {
                     radius: initialRadius * 2,
                     color: lightMode ? 'black' : 'white',
@@ -459,6 +459,8 @@ setInterval(() => {
             lastMaxPGA = 0;
             circle_palert = null
             Pcircle_palert = null
+            map.removeLayer(circle_palert);
+            map.removeLayer(Pcircle_palert);
         }
 
         // Report
@@ -476,6 +478,10 @@ setInterval(() => {
         // eew
         if (data.HasEarthquake && shouldPlayAlert) {
             shouldPlayAlert = false;
+            circle_palert = null
+            Pcircle_palert = null
+            map.removeLayer(circle_palert);
+            map.removeLayer(Pcircle_palert);
             const earthquake = data.Earthquake;
             const replayButton = document.getElementById('replayButton');
             // Edit UI
@@ -1090,5 +1096,6 @@ function generateToken() {
     return { ts, sign: hex };
   });
 }
+
 
 
