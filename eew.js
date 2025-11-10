@@ -457,10 +457,12 @@ setInterval(() => {
         }
         else {
             lastMaxPGA = 0;
+            if (circle_palert) {
+                map.removeLayer(circle_palert);
+                map.removeLayer(Pcircle_palert);
+            }
             circle_palert = null
             Pcircle_palert = null
-            map.removeLayer(circle_palert);
-            map.removeLayer(Pcircle_palert);
         }
 
         // Report
@@ -478,10 +480,12 @@ setInterval(() => {
         // eew
         if (data.HasEarthquake && shouldPlayAlert) {
             shouldPlayAlert = false;
+            if (circle_palert) {
+                map.removeLayer(circle_palert);
+                map.removeLayer(Pcircle_palert);
+            }
             circle_palert = null
             Pcircle_palert = null
-            map.removeLayer(circle_palert);
-            map.removeLayer(Pcircle_palert);
             const earthquake = data.Earthquake;
             const replayButton = document.getElementById('replayButton');
             // Edit UI
@@ -1096,6 +1100,7 @@ function generateToken() {
     return { ts, sign: hex };
   });
 }
+
 
 
 
