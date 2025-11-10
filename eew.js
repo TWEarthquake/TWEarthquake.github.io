@@ -385,6 +385,50 @@ setInterval(() => {
 
         // P-Alert Notification
         if (data.HasPAlert) {
+            // Circle animation
+            const activateStation = Object.entries(data.PGAs)
+                .filter(([_, info]) => info.pga > 2.5);
+            const [_, station] = activateStation.reduce((min, cur) =>
+                cur[1].pga < min[1].pga ? cur : min
+            );
+            const PWaveDistance = getDistance(maxLocation.lat, maxLocation.lon, station.lat, station.lon);
+            const initialRadius = PWaveDistance * 500;
+
+            if (circle_palert) {
+                map.removeLayer(circle_palert);
+                map.removeLayer(Pcircle_palert);
+                clearInterval(timer_palert);
+            }
+
+            Pcircle_palert = L.circle([maxLocation.lat, maxLocation.lon], {
+                radius: initialRadius * 2,
+                color: lightMode ? 'black' : 'white',
+                weight: 2,
+                fillOpacity: 0
+            }).addTo(map);
+
+            circle_palert = L.circle([maxLocation.lat, maxLocation.lon], {
+                radius: initialRadius,
+                color: getColorByPGA(pAlertData.Max),
+                fillColor: getColorByPGA(pAlertData.Max),
+                fillOpacity: 0.3,
+                weight: 2
+            }).addTo(map);
+
+            let currentRadius = initialRadius;
+            const interval = 25;
+            const updateRadius = () => {
+                currentRadius += (3500 * (interval / 1000));
+                Pcircle_palert.setRadius(currentRadius * 2);
+                circle_palert.setRadius(currentRadius);
+
+                if (currentRadius > 445000) {
+                    map.removeLayer(circle_palert);
+                    map.removeLayer(Pcircle_palert);
+                    clearInterval(timer_palert);
+                }
+            };
+            timer_palert = setInterval(updateRadius, interval);
             // Sound
             if (pAlert && pAlertData.Max > lastMaxPGA) {
                 if (pAlertData.Max >= 80 && lastMaxPGA < 80) {
@@ -698,6 +742,9 @@ function updateUserMarker(lat, lon) {
 let circle = null;
 let Pcircle = null;
 let timer = null;
+let circle_palert = null;
+let Pcircle_palert = null;
+let timer_palert = null;
 
 let colorLayer = null;
 const levelColors = {
@@ -1044,13 +1091,4 @@ function generateToken() {
     const hex = Array.from(new Uint8Array(signature)).map(b => b.toString(16).padStart(2, '0')).join('');
     return { ts, sign: hex };
   });
-
 }
-
-
-
-
-
-
-
-
