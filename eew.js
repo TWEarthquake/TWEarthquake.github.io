@@ -330,6 +330,7 @@ setInterval(() => {
         gridSquares = [];
         const pAlertData = data.PAlertData;
         const PGAs = Object.values(pAlertData.PGAs);
+        const maxLocation = PGAs.find(e => e.pga === pAlertData.Max);
         
         try {
             // Add circle
@@ -378,7 +379,6 @@ setInterval(() => {
             }
 
             // draw Map
-            const maxLocation = PGAs.find(e => e.pga === pAlertData.Max);
             updateRectangle(maxLocation.lat, maxLocation.lon, Math.round(maxLocation.pga * 100) / 100);
         }
         catch {}
@@ -1100,6 +1100,7 @@ function generateToken() {
     return { ts, sign: hex };
   });
 }
+
 
 
 
