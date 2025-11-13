@@ -421,6 +421,8 @@ setInterval(() => {
                         map.removeLayer(circle_palert);
                         map.removeLayer(Pcircle_palert);
                         clearInterval(timer_palert);
+                        circle_palert = null
+                        Pcircle_palert = null
                     }
                 };
                 timer_palert = setInterval(updateRadius, interval);
@@ -457,13 +459,6 @@ setInterval(() => {
         }
         else {
             lastMaxPGA = 0;
-            if (circle_palert) {
-                map.removeLayer(circle_palert);
-                map.removeLayer(Pcircle_palert);
-                clearInterval(timer_palert);
-            }
-            circle_palert = null
-            Pcircle_palert = null
         }
 
         // Report
@@ -1102,9 +1097,5 @@ function generateToken() {
     return { ts, sign: hex };
   });
 }
-
-
-
-
 
 
