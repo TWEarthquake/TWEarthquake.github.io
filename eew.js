@@ -460,6 +460,7 @@ setInterval(() => {
             if (circle_palert) {
                 map.removeLayer(circle_palert);
                 map.removeLayer(Pcircle_palert);
+                clearInterval(timer_palert);
             }
             circle_palert = null
             Pcircle_palert = null
@@ -483,6 +484,7 @@ setInterval(() => {
             if (circle_palert) {
                 map.removeLayer(circle_palert);
                 map.removeLayer(Pcircle_palert);
+                clearInterval(timer_palert);
             }
             circle_palert = null
             Pcircle_palert = null
@@ -1100,6 +1102,7 @@ function generateToken() {
     return { ts, sign: hex };
   });
 }
+
 
 
 
