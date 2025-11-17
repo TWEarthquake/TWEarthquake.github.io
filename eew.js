@@ -395,6 +395,7 @@ setInterval(() => {
             const initialRadius = PWaveDistance * 500;
 
             if (!circle_palert && shouldPlayAlert) {
+                updateMarker_palert(maxLocation.lat, maxLocation.lon);
                 Pcircle_palert = L.circle([maxLocation.lat, maxLocation.lon], {
                     radius: initialRadius * 2,
                     color: lightMode ? 'black' : 'white',
@@ -720,6 +721,7 @@ function fetchWithTimeout(url, timeout, options = {}) {
 }
 
 let centerMarker = null;
+let centerMarker_palert = null;
 function updateMarker(lat, lon) {
     center = [lat, lon];
     if (centerMarker) {
@@ -733,6 +735,20 @@ function updateMarker(lat, lon) {
     });
 
     centerMarker = L.marker([lat, lon], { icon: customIcon }).addTo(map);
+};
+function updateMarker_palert(lat, lon) {
+    center = [lat, lon];
+    if (centerMarker_palert) {
+        map.removeLayer(centerMarker_palert);
+    }
+
+    const customIcon = L.icon({
+        iconUrl: './Web/pcross.png',
+        iconSize: [30, 30],
+        iconAnchor: [15, 15]
+    });
+
+    centerMarker_palert = L.marker([lat, lon], { icon: customIcon }).addTo(map);
 };
 
 let userMarker = null;
@@ -1097,5 +1113,6 @@ function generateToken() {
     return { ts, sign: hex };
   });
 }
+
 
 
