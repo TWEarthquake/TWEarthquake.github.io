@@ -424,6 +424,9 @@ setInterval(() => {
                         clearInterval(timer_palert);
                         circle_palert = null
                         Pcircle_palert = null
+                        if (centerMarker_palert) {
+                            map.removeLayer(centerMarker_palert);
+                        }
                     }
                 };
                 timer_palert = setInterval(updateRadius, interval);
@@ -1113,6 +1116,7 @@ function generateToken() {
     return { ts, sign: hex };
   });
 }
+
 
 
 
