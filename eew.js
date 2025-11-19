@@ -746,7 +746,7 @@ function updateMarker_palert(lat, lon) {
     }
 
     const customIcon = L.icon({
-        iconUrl: './Web/pcross.png',
+        iconUrl: './pcross.png',
         iconSize: [30, 30],
         iconAnchor: [15, 15]
     });
@@ -1116,6 +1116,7 @@ function generateToken() {
     return { ts, sign: hex };
   });
 }
+
 
 
 
