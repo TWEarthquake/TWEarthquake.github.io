@@ -290,6 +290,18 @@ function getColorByPGA(pga) {
     else if (pga >= 0.8) return '#99DABB';
     else return 'white';
 }
+function getLevelByPGA(pga) {
+    if (pga >= 800) return '7 級';
+    else if (pga >= 440) return '6 強';
+    else if (pga >= 250) return '6 弱';
+    else if (pga >= 140) return '5 強';
+    else if (pga >= 80) return '5 弱';
+    else if (pga >= 25) return '4 級';
+    else if (pga >= 8) return '3 級';
+    else if (pga >= 2.5) return '2 級';
+    else if (pga >= 0.8) return '1 級';
+    else return '0 級';
+}
 
 let lastReportText = '';
 let lastTsuText = '';
@@ -459,7 +471,7 @@ setInterval(() => {
                         .map(e => e.area)
                 )
             ];
-            showNotification(`【P-Alert】${pAlertData.UpdateTime} 左右偵測到搖晃\n共 ${activateCount} 個測站被觸發\n範圍包含：${areas.map(area => locations[area] || area).join('、')}\n最大PGA值：${pAlertData.Max} gal`);
+            showNotification(`【P-Alert】${pAlertData.UpdateTime} 左右偵測到搖晃\n共 ${activateCount} 個測站被觸發\n範圍包含：${areas.map(area => locations[area] || area).join('、')}\n最大震度：${getLevelByPGA(pAlertData.Max)}（${pAlertData.Max} gal）`);
         }
         else {
             lastMaxPGA = 0;
@@ -1116,6 +1128,7 @@ function generateToken() {
     return { ts, sign: hex };
   });
 }
+
 
 
 
