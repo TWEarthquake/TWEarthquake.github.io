@@ -66,6 +66,11 @@
             <p class="statistics-subtitle">每月氣象署發布地震報告的次數（包含小區域有感地震報告及顯著有感地震報告）</p>
             <canvas id="report-chart" height="125"></canvas>
         </div>
+        <div class="statistics-information">
+            <p class="statistics-title">P-Alert</p>
+            <p class="statistics-subtitle">每月發布P-Alert的次數（包含更正報，發布標準請至「關於地震速報」中查看）</p>
+            <canvas id="palert-chart" height="125"></canvas>
+        </div>
     </div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -113,6 +118,33 @@
                     {
                         label: '平均值',
                         data: Array(data.tsuList.map(item => item[1]).length).fill(Math.round(avg))
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            ticks: {
+                                stepSize: 1,
+                                precision: 0
+                            }
+                        }
+                    }
+                }
+            });
+
+            var sum = data.pAlertList.map(item => item[1]).reduce((a, b) => a + b, 0);
+            var avg = data.pAlertList.map(item => item[1]).length > 0 ? sum / data.pAlertList.map(item => item[1]).length : 0;
+            new Chart(document.getElementById('palert-chart'), {
+                type: 'line',
+                data: {
+                    labels: data.pAlertList.map(item => item[0]),
+                    datasets: [{
+                        label: '次數',
+                        data: data.pAlertList.map(item => item[1])
+                    },
+                    {
+                        label: '平均值',
+                        data: Array(data.pAlertList.map(item => item[1]).length).fill(Math.round(avg))
                     }]
                 },
                 options: {
@@ -199,6 +231,7 @@
 </script>
 
 </html>
+
 
 
 
