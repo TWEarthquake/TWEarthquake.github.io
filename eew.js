@@ -471,7 +471,7 @@ setInterval(() => {
                         .map(e => e.area)
                 )
             ];
-            showNotification(`【P-Alert】${pAlertData.UpdateTime} 左右偵測到搖晃\n共 ${activateCount} 個測站被觸發\n範圍包含：${areas.map(area => locations[area] || area).join('、')}\n最大震度：${getLevelByPGA(pAlertData.Max)}（${pAlertData.Max} gal）`);
+            showNotification(`【P-Alert】${pAlertData.UpdateTime} 左右偵測到搖晃 #${pAlertData.Count}\n共 ${activateCount} 個測站被觸發\n範圍包含：${areas.map(area => locations[area] || area).join('、')}\n最大震度：${getLevelByPGA(pAlertData.Max)}（${pAlertData.Max} gal）`);
         }
         else {
             lastMaxPGA = 0;
@@ -1128,6 +1128,7 @@ function generateToken() {
     return { ts, sign: hex };
   });
 }
+
 
 
 
