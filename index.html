@@ -26,6 +26,13 @@
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 </head>
 <body>
+    <div class="notice" onclick="unshow_notice()">
+        <div>
+            <p>使用前請詳閱 <a href="/about" target="_blank">關於地震速報</a>，如繼續使用，即視為了解且同意該頁面內容。</p>
+            <p>注意：離開此頁面可能導致無法接收速報</p>
+			<p style="margin-top: 50px; animation: black-red 1s ease-in-out infinite alternate;">點擊任意處以繼續</p>
+        </div>
+    </div>
     <div id="notification-container"></div>
     <div id="container">
         <div id="map">
@@ -293,6 +300,7 @@
     }
 </script>
 </html>
+
 
 
 
