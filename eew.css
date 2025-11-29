@@ -146,6 +146,7 @@ body {
     padding-right: 5px;
     padding-bottom: 5px;
     color: black;
+	display: none;
 }
 
 #warning-legend{
@@ -404,3 +405,4 @@ a:hover {
     align-items: center;
     flex-direction: column;
 }
+
