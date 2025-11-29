@@ -72,12 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
         towns.forEach((town, index) => {
             const option = document.createElement('option');
             option.textContent = town;
-            
-            if (index === 0) {
-                option.value = '';
-            } else {
-                option.value = index.toString();
-            }
+            option.value = index === 0 ? '' : index.toString();
             
             townSelect.appendChild(option);
         });
@@ -623,12 +618,8 @@ setInterval(() => {
                 clearInterval(timer);
             }
 
-            if (earthquake.level == '0') {
-                color = 'white'
-            }
-            else {
-                color = levelColor[earthquake.level]
-            }
+            color = earthquake.level == '0' ? 'white' : levelColor[earthquake.level]
+          
             Pcircle = L.circle([centerLat, centerLon], {
                 radius: initialRadius * 2,
                 color: lightMode ? 'black' : 'white',
@@ -1049,12 +1040,8 @@ function replay() {
                     clearInterval(timer);
                 }
 
-                if (earthquake.level == '0') {
-                    color = 'white'
-                }
-                else {
-                    color = levelColor[earthquake.level]
-                }
+                color = earthquake.level == '0' ? 'white' : levelColor[earthquake.level]
+              
                 Pcircle = L.circle([centerLat, centerLon], {
                     radius: initialRadius * 2,
                     color: lightMode ? 'black' : 'white',
@@ -1132,3 +1119,4 @@ function unshow_notice() {
     document.querySelector('.notice').style.display = "none"
     document.querySelector('#legend').style.display = "flex"
 };
+
