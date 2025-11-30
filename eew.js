@@ -398,7 +398,7 @@ setInterval(() => {
                 cur[1].pga < min[1].pga ? cur : min
             );
             const PWaveDistance = getDistance(maxLocation.lat, maxLocation.lon, station.lat, station.lon);
-            const initialRadius = PWaveDistance * 500;
+            const initialRadius = PWaveDistance * 500 + 3500 * pAlertData.dTime;
 
             if (!circle_palert && shouldPlayAlert) {
                 updateMarker_palert(maxLocation.lat, maxLocation.lon);
@@ -1119,5 +1119,6 @@ function unshow_notice() {
     document.querySelector('.notice').style.display = "none"
     document.querySelector('#legend').style.display = "flex"
 };
+
 
 
