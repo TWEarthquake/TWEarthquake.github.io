@@ -740,6 +740,16 @@ function updateMarker(lat, lon) {
     });
 
     centerMarker = L.marker([lat, lon], { icon: customIcon }).addTo(map);
+  
+    centerMarker.on("mouseover", (e) => {
+        const el = e.target._icon;
+        if (el) el.style.opacity = "0.25";
+    });
+
+    centerMarker.on("mouseout", (e) => {
+        const el = e.target._icon;
+        if (el) el.style.opacity = "1";
+    });
 };
 function updateMarker_palert(lat, lon) {
     center = [lat, lon];
@@ -1119,6 +1129,7 @@ function unshow_notice() {
     document.querySelector('.notice').style.display = "none"
     document.querySelector('#legend').style.display = "flex"
 };
+
 
 
 
