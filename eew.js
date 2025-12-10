@@ -335,8 +335,8 @@ setInterval(() => {
         gridSquares.forEach(r => map.removeLayer(r));
         gridSquares = [];
         const pAlertData = data.PAlertData;
+        const maxLocation = pAlertData.maxStation;
         const PGAs = Object.values(pAlertData.PGAs);
-        const maxLocation = PGAs.find(e => e.pga === pAlertData.Max);
         
         try {
             // Add circle
@@ -1129,6 +1129,7 @@ function unshow_notice() {
     document.querySelector('.notice').style.display = "none"
     document.querySelector('#legend').style.display = "flex"
 };
+
 
 
 
