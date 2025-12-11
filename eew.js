@@ -773,6 +773,15 @@ function updateUserMarker(lat, lon) {
     }
 
     userMarker = L.marker([lat, lon]).addTo(map);
+    userMarker.on("mouseover", (e) => {
+        const el = e.target._icon;
+        if (el) el.style.opacity = "0.25";
+    });
+
+    userMarker.on("mouseout", (e) => {
+        const el = e.target._icon;
+        if (el) el.style.opacity = "1";
+    });
 };
 
 let circle = null;
@@ -1129,6 +1138,7 @@ function unshow_notice() {
     document.querySelector('.notice').style.display = "none"
     document.querySelector('#legend').style.display = "flex"
 };
+
 
 
 
