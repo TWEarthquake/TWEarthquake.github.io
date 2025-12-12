@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
         .then(data => {
             hasInit = true;
             apiUrl = data.url;
-            eqData = JSON.parse(data.data);
+            eqData = data.data;
             document.getElementById('timeLabel').innerText = data.time;
             document.getElementById('loactionLabel').innerHTML = `${data.latitude}°N, ${data.longitude}°E<br>(位於${data.address})`;
             updateMarker(data.latitude, data.longitude);
@@ -972,3 +972,4 @@ function unshow_notice() {
     document.querySelector('.notice').style.display = "none"
     document.querySelector('#legend').style.display = "flex"
 };
+
