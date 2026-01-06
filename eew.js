@@ -477,7 +477,7 @@ setInterval(() => {
             if (reportData.msg != lastReportText) {
                 lastReportText = reportData.msg
                 // Notification
-                showNotification(reportData.msg, 7500);
+                showNotification(reportData.msg, 10000);
                 // Sound
                 playSound("notify");
             }
@@ -972,4 +972,5 @@ function unshow_notice() {
     document.querySelector('.notice').style.display = "none"
     document.querySelector('#legend').style.display = "flex"
 };
+
 
