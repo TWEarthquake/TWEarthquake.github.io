@@ -56,7 +56,7 @@ function updateMarker_report(lat, lon) {
     }
 
     const customIcon = L.icon({
-        iconUrl: './Web/cross_blue.png',
+        iconUrl: './cross_blue.png',
         iconSize: [30, 30],
         iconAnchor: [15, 15]
     });
