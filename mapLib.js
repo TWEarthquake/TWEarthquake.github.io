@@ -1,4 +1,5 @@
 let centerMarker = null;
+let centerMarker_report = null;
 let centerMarker_palert = null;
 let userMarker = null;
 let circle = null;
@@ -49,8 +50,31 @@ function updateMarker(lat, lon) {
     });
 };
 
+function updateMarker_report(lat, lon) {
+    if (centerMarker_report) {
+        map.removeLayer(centerMarker_report);
+    }
+
+    const customIcon = L.icon({
+        iconUrl: './Web/cross_blue.png',
+        iconSize: [30, 30],
+        iconAnchor: [15, 15]
+    });
+
+    centerMarker_report = L.marker([lat, lon], { icon: customIcon }).addTo(map);
+
+    centerMarker_report.on("mouseover", (e) => {
+        const el = e.target._icon;
+        if (el) el.style.opacity = "0.25";
+    });
+
+    centerMarker_report.on("mouseout", (e) => {
+        const el = e.target._icon;
+        if (el) el.style.opacity = "1";
+    });
+};
+
 function updateMarker_palert(lat, lon) {
-    center = [lat, lon];
     if (centerMarker_palert) {
         map.removeLayer(centerMarker_palert);
     }
