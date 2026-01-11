@@ -168,7 +168,12 @@ function updateReport(reportDetailData) {
         stations.forEach(([name, lat, lon]) => {
             const marker = L.marker([lat, lon], { icon })
                 .addTo(map)
-                .bindPopup(`${name}`);
+                .bindTooltip(name, {
+                    permanent: false,
+                    direction: "top",
+                    offset: [0, -10],
+                    opacity: 0.9
+                });
             report.push(marker);
         });
     });
