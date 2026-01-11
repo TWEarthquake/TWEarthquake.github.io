@@ -472,8 +472,8 @@ setInterval(() => {
         }
 
         // Report
+        const reportData = data.ReportData;
         if (data.HasReport) {
-            const reportData = data.ReportData;
             if (reportData.msg != lastReportText) {
                 lastReportText = reportData.msg
                 // Notification
@@ -482,6 +482,7 @@ setInterval(() => {
                 playSound("notify");
             }
         }
+        updateMarker_report(reportData.lat, reportData.lon)
 
         // eew
         if (data.HasEarthquake && shouldPlayAlert) {
@@ -972,5 +973,6 @@ function unshow_notice() {
     document.querySelector('.notice').style.display = "none"
     document.querySelector('#legend').style.display = "flex"
 };
+
 
 
