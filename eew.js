@@ -57,7 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
             updateReport(reportData.detail);
         })
     .catch(e => { alert('無法取得資料, 請稍後再試') });
-    fetch('Web/TWN_TOWN_low.json')
+    fetch('./TWN_TOWN_low.json')
         .then(response => response.json())
         .then(data => {
             taiwanGeoJSON = data;
@@ -978,6 +978,7 @@ function unshow_notice() {
     document.querySelector('.notice').style.display = "none"
     document.querySelector('#legend').style.display = "flex"
 };
+
 
 
 
