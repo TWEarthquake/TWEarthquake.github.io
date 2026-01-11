@@ -482,7 +482,7 @@ setInterval(() => {
                 playSound("notify");
             }
         }
-        updateMarker_report(reportData.lat, reportData.lon);
+        updateMarker_report(reportData.lat, reportData.lon, reportData.ti, reportData.na, reportData.de, reportData.sc);
         updateReport(reportData.detail);
 
         // eew
@@ -974,6 +974,7 @@ function unshow_notice() {
     document.querySelector('.notice').style.display = "none"
     document.querySelector('#legend').style.display = "flex"
 };
+
 
 
 
