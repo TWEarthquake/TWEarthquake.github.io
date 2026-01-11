@@ -55,7 +55,7 @@ function updateMarker(lat, lon) {
     });
 };
 
-function updateMarker_report(lat, lon) {
+function updateMarker_report(lat, lon, ti, na, de, sc) {
     if (centerMarker_report) {
         map.removeLayer(centerMarker_report);
     }
