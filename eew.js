@@ -483,7 +483,7 @@ setInterval(() => {
             }
         }
         updateMarker_report(reportData.lat, reportData.lon);
-        updateReport(reportData.de);
+        updateReport(reportData.detail);
 
         // eew
         if (data.HasEarthquake && shouldPlayAlert) {
@@ -974,6 +974,7 @@ function unshow_notice() {
     document.querySelector('.notice').style.display = "none"
     document.querySelector('#legend').style.display = "flex"
 };
+
 
 
 
