@@ -16,6 +16,11 @@ const levelColors = {
 let rectangle = null;
 let label = null;
 let tsunami = [];
+let report = [];
+const levelIcons = {
+    '0級': '0', '1級': '1', '2級': '2', '3級': '3', '4級': '4',
+    '5弱': '5', '5強': '6', '6弱': '7', '6強': '8', '7級': '9'
+};
 const tsunamiColors = {
     'N': '#4e8cff',
     '小於0.3公尺': '#00a355',
@@ -148,6 +153,25 @@ function updateRectangle(lat, lon, text = '') {
             iconAnchor: [20, 20]
         })
     }).addTo(map);
+};
+
+function updateReport(reportDetailData) {
+    report.forEach(r => map.removeLayer(r));
+    report = [];
+    Object.entries(reportDetailData).forEach(([level, stations]) => {
+        const icon = L.icon({
+            iconUrl: `https://twearthquake.github.io/levels/${levelIcons[level]}.png`,
+            iconSize: [30, 30],
+            iconAnchor: [15, 15]
+        })
+
+        stations.forEach(([name, lat, lon]) => {
+            const marker = L.marker([lat, lon], { icon })
+                .addTo(map)
+                .bindPopup(`${name}`);
+            report.push(marker);
+        });
+    });
 };
 
 function updateTsunami(tsunamiData) {
