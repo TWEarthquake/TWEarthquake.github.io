@@ -66,7 +66,14 @@ function updateMarker_report(lat, lon) {
         iconAnchor: [15, 15]
     });
 
-    centerMarker_report = L.marker([lat, lon], { icon: customIcon }).addTo(map);
+    centerMarker_report = L.marker([lat, lon], { icon: customIcon })
+        .addTo(map)
+        .bindTooltip(`${na}<br>發震時間：${ti}<br>深度：${de} 公里<br>規模：${sc}`, {
+            permanent: false,
+            direction: "top",
+            offset: [0, -10],
+            opacity: 0.9
+        });
 
     centerMarker_report.on("mouseover", (e) => {
         const el = e.target._icon;
