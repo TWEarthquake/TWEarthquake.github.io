@@ -52,15 +52,18 @@ document.addEventListener("DOMContentLoaded", () => {
             document.getElementById('maxLevelLabel').innerText = data.maxlevel;
             document.getElementById('levelLabel').innerText = data.level;
             updateLocationInformation();
-            fetch('./TWN_TOWN_low.json')
-                .then(response => response.json())
-                .then(data => {
-                    taiwanGeoJSON = data;
-                    updateColor(eqData);
-                })
-            .catch(e => {});
+            const reportData = data.ReportData;
+            updateMarker_report(reportData.lat, reportData.lon, reportData.ti, reportData.na, reportData.de, reportData.sc);
+            updateReport(reportData.detail);
         })
     .catch(e => { alert('無法取得資料, 請稍後再試') });
+    fetch('Web/TWN_TOWN_low.json')
+        .then(response => response.json())
+        .then(data => {
+            taiwanGeoJSON = data;
+            updateColor(eqData);
+        })
+    .catch(e => {});
     
     const townSelectElement = document.getElementById('townSelect');
     
@@ -473,17 +476,18 @@ setInterval(() => {
 
         // Report
         const reportData = data.ReportData;
-        if (data.HasReport) {
-            if (reportData.msg != lastReportText) {
-                lastReportText = reportData.msg
+        if (reportData.msg != lastReportText) {
+            lastReportText = reportData.msg
+
+            if (data.HasReport) {
                 // Notification
                 showNotification(reportData.msg, 10000);
                 // Sound
                 playSound("notify");
             }
+            updateMarker_report(reportData.lat, reportData.lon, reportData.ti, reportData.na, reportData.de, reportData.sc);
+            updateReport(reportData.detail);
         }
-        updateMarker_report(reportData.lat, reportData.lon, reportData.ti, reportData.na, reportData.de, reportData.sc);
-        updateReport(reportData.detail);
 
         // eew
         if (data.HasEarthquake && shouldPlayAlert) {
@@ -974,6 +978,7 @@ function unshow_notice() {
     document.querySelector('.notice').style.display = "none"
     document.querySelector('#legend').style.display = "flex"
 };
+
 
 
 
