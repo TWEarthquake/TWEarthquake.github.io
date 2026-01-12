@@ -181,6 +181,21 @@ function updateReport(reportDetailData, centerLat, centerLon) {
                     offset: [0, -10],
                     opacity: 0.9
                 });
+            marker.on("mouseover", () => {
+                report.forEach(m => {
+                    if (m !== marker) {
+                        if (m._icon) m._icon.style.opacity = "0.5";
+                    } else {
+                        if (m._icon) m._icon.style.opacity = "1";
+                    }
+                });
+            });
+            marker.on("mouseout", () => {
+                report.forEach(m => {
+                    if (m._icon) m._icon.style.opacity = "1";
+                });
+            });
+            
             report.push(marker);
         });
     });
