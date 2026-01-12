@@ -162,7 +162,7 @@ function updateRectangle(lat, lon, text = '') {
     }).addTo(map);
 };
 
-function updateReport(reportDetailData) {
+function updateReport(reportDetailData, centerLat, centerLon) {
     report.forEach(r => map.removeLayer(r));
     report = [];
     Object.entries(reportDetailData).forEach(([level, stations]) => {
@@ -175,7 +175,7 @@ function updateReport(reportDetailData) {
         stations.forEach(([name, lat, lon]) => {
             const marker = L.marker([lat, lon], { icon })
                 .addTo(map)
-                .bindTooltip(name, {
+                .bindTooltip(`站名：${name}<br>震央距：${Math.round(getDistance(lat, lon, centerLat, centerLon) * 100) / 100} 公里`, {
                     permanent: false,
                     direction: "top",
                     offset: [0, -10],
