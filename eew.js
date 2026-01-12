@@ -53,8 +53,8 @@ document.addEventListener("DOMContentLoaded", () => {
             document.getElementById('levelLabel').innerText = data.level;
             updateLocationInformation();
             const reportData = data.ReportData;
+            updateReport(reportData.detail, reportData.lat, reportData.lon);
             updateMarker_report(reportData.lat, reportData.lon, reportData.ti, reportData.na, reportData.de, reportData.sc);
-            updateReport(reportData.detail);
         })
     .catch(e => { alert('無法取得資料, 請稍後再試') });
     fetch('./TWN_TOWN_low.json')
@@ -485,7 +485,7 @@ setInterval(() => {
                 // Sound
                 playSound("notify");
             }
-            updateReport(reportData.detail);
+            updateReport(reportData.detail, reportData.lat, reportData.lon);
             updateMarker_report(reportData.lat, reportData.lon, reportData.ti, reportData.na, reportData.de, reportData.sc);
         }
 
@@ -978,6 +978,7 @@ function unshow_notice() {
     document.querySelector('.notice').style.display = "none"
     document.querySelector('#legend').style.display = "flex"
 };
+
 
 
 
