@@ -168,8 +168,8 @@ function updateReport(reportDetailData, centerLat, centerLon) {
     Object.entries(reportDetailData).forEach(([level, stations]) => {
         const icon = L.icon({
             iconUrl: `https://twearthquake.github.io/levels/${levelIcons[level]}.png`,
-            iconSize: [30, 30],
-            iconAnchor: [15, 15]
+            iconSize: [28, 28],
+            iconAnchor: [14, 14]
         })
 
         stations.forEach(([name, lat, lon]) => {
