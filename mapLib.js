@@ -121,8 +121,6 @@ function updateColor(data) {
     if (colorLayer) {
         map.removeLayer(colorLayer);
     }
-    report.forEach(r => map.removeLayer(r));
-    report = [];
 
     colorLayer = L.geoJSON(taiwanGeoJSON, {
         style: feature => {
