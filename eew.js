@@ -504,6 +504,9 @@ setInterval(() => {
             // Edit UI
             report.forEach(r => map.removeLayer(r));
             report = [];
+            if (centerMarker_report) {
+                map.removeLayer(centerMarker_report);
+            }
             replayButton.disabled = true;
             replayButton.style.backgroundColor = lightMode ? '#cccccc' : '#999999';
             muteButton.style.display = 'block'
@@ -980,6 +983,7 @@ function unshow_notice() {
     document.querySelector('.notice').style.display = "none"
     document.querySelector('#legend').style.display = "flex"
 };
+
 
 
 
