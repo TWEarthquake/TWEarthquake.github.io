@@ -19,7 +19,7 @@ messaging.onMessage(function(payload) {
 
   const notification = new Notification(msgTitle, {
     body: payload.data.body,
-    icon: "/Web/f256x256.png"
+    icon: "./f256x256.png"
   });
 
   notification.onclick = function(e) {
@@ -49,9 +49,10 @@ self.addEventListener("notificationclick", function(event) {
 messaging.onBackgroundMessage(function(payload) {
   self.registration.showNotification(payload.data.title, {
     body: payload.data.body,
-    icon: "/Web/f256x256.png",
+    icon: "./f256x256.png",
     data: {
       url: "/"
     }
   });
+
 });
