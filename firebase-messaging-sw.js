@@ -50,14 +50,15 @@ messaging.onBackgroundMessage(function(payload) {
   self.registration.showNotification(payload.data.title, {
     body: payload.data.body,
     icon: "./f256x256.png",
-    vibrate: [2000, 500, 1000, 500, 1000],
-    requireInteraction: true,
-    renotify: true,
+    //vibrate: [2000, 500, 1000, 500, 1000],
+    //requireInteraction: true,
+    //renotify: true,
     data: {
       url: "/"
     }
   });
 
 });
+
 
 
