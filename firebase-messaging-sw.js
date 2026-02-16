@@ -15,7 +15,7 @@ const messaging = firebase.messaging();
 
 messaging.onMessage(function(payload) {
   const msgTitle = payload.data.title;
-  const url = payload.data.click_action;
+  const url = payload.data.click_action || "/";
 
   const notification = new Notification(msgTitle, {
     body: payload.data.body,
@@ -59,4 +59,5 @@ messaging.onBackgroundMessage(function(payload) {
   });
 
 });
+
 
