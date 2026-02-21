@@ -31,6 +31,7 @@ let currentVolume = 1;
 let apiUrl = '';
 let subUrl = '';
 let hasInit = false;
+let userToken = null;
 
 document.addEventListener("DOMContentLoaded", () => {
     console.log('%c \n如果有人叫你在這裡複製貼上那絕對是在騙你 ¯\_(ツ)_/¯', 'font-size: 28px; color: #FF0000');
@@ -91,10 +92,10 @@ document.addEventListener("DOMContentLoaded", () => {
         alertLevel = parseInt(e.target.value, 10);
     });
 
-    document.getElementById('pAlertSelect').addEventListener("change", (e) => {
-        if (e.target.value == "True") pAlert = true
-        else pAlert = false
-    });
+    // document.getElementById('pAlertSelect').addEventListener("change", (e) => {
+    //     if (e.target.value == "True") pAlert = true
+    //     else pAlert = false
+    // });
 
     document.getElementById('volumeSlider').addEventListener('input', (e) => {
         currentVolume = parseFloat(e.target.value);
@@ -985,6 +986,7 @@ function unshow_notice() {
     document.querySelector('.notice').style.display = "none"
     document.querySelector('#legend').style.display = "flex"
 };
+
 
 
 
