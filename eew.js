@@ -199,7 +199,50 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         }
     });
+
+    document.getElementById('sub-eew-button').addEventListener("click", function () {
+        toggleSubscribe(this, 'eew')
+    });
+    document.getElementById('sub-sreport-button').addEventListener("click", function () {
+        toggleSubscribe(this, 'sreport')
+    });
+    document.getElementById('sub-report-button').addEventListener("click", function () {
+        toggleSubscribe(this, 'report')
+    });
+    document.getElementById('sub-tsu-button').addEventListener("click", function () {
+        toggleSubscribe(this, 'tsu')
+    });
 });
+
+const toggleSubscribe = (button, type) => {
+    if (userToken == null) return
+    if (button.className === 'unsub-button') {
+        button.className = 'sub-button';
+        button.innerText = '訂閱';
+        fetch(unsubUrl, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ token: userToken, type: type })
+        })
+        .then(res => res.json())
+        .then(data => {
+            
+        });
+    } 
+    else {
+        button.className = 'unsub-button';
+        button.innerText = '取消訂閱';
+        fetch(subUrl, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ token: userToken, type: type })
+        })
+        .then(res => res.json())
+        .then(data => {
+            
+        });
+    }
+};
 
 const updateLocationInformation = () => {
     const townSelectElement = document.getElementById('townSelect');
@@ -988,6 +1031,7 @@ function unshow_notice() {
     document.querySelector('.notice').style.display = "none"
     document.querySelector('#legend').style.display = "flex"
 };
+
 
 
 
