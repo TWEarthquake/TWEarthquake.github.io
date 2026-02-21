@@ -254,7 +254,7 @@ body {
 	outline: 0;
 }
 
-select {
+select, .sub-button, .unsub-button {
     width: 90px;
     padding: 8px 4px;
     border: 1.5px solid #ccc;
@@ -268,6 +268,14 @@ select {
     cursor: pointer;
     outline: none;
     transition: all 0.3s ease;
+}
+
+.sub-button {
+    color: green;
+}
+
+.unsub-button {
+    color: red;
 }
 
 select::-ms-expand {
@@ -377,7 +385,6 @@ a:hover {
     right: 20px;
     font-size: 35px;
     cursor: pointer;
-
 }
 
 .notice {
@@ -405,5 +412,6 @@ a:hover {
     align-items: center;
     flex-direction: column;
 }
+
 
 
