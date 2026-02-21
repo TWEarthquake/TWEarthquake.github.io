@@ -208,6 +208,37 @@
                         </div>
                     </div>
                 </div>
+				<div class="epicenter-table">
+                    <div class="row" style="align-items: flex-end; padding: 0;">
+                        <div class="header" style="font-size: 28px;font-weight: bold">通知</div>
+                    </div>
+                </div>
+                <div class="epicenter-table">
+                    <div class="row">
+                        <div class="header">地震速報</div>
+                        <div class="content">
+                            <button class="unsub-button" id="sub-eew-button">取消訂閱</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="header">小區域有感地震</div>
+                        <div class="content">
+                            <button class="sub-button" id="sub-sreport-button">訂閱</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="header">顯著有感地震</div>
+                        <div class="content">
+                            <button class="sub-button" id="sub-report-button">訂閱</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="header">海嘯警報</div>
+                        <div class="content">
+                            <button class="sub-button" id="sub-tsu-button">訂閱</button>
+                        </div>
+                    </div>
+                </div>
                 <span class="foot">本服務使用音效係由「地牛Wake Up!」授權使用</span>
                 <br>
                 <span class="foot">Copyrights &copy; 2024-2026, Chang Yu-Hsi. All rights reserved.</span>
@@ -341,13 +372,22 @@
                 })
 				.then(res => res.json())
                 .then(data => {
-                    console.log(data)
+                    document.getElementById('sub-eew-button').innerText = data.state[0] == 'True' ? '取消訂閱' : '訂閱';
+                    document.getElementById('sub-sreport-button').innerText = data.state[2] == 'True' ? '取消訂閱' : '訂閱';
+                    document.getElementById('sub-report-button').innerText = data.state[1] == 'True' ? '取消訂閱' : '訂閱';
+                    document.getElementById('sub-tsu-button').innerText = data.state[3] == 'True' ? '取消訂閱' : '訂閱';
+
+                    document.getElementById('sub-eew-button').className = data.state[0] == 'True' ? 'unsub-button' : 'sub-button';
+                    document.getElementById('sub-sreport-button').className = data.state[2] == 'True' ? 'unsub-button' : 'sub-button';
+                    document.getElementById('sub-report-button').className = data.state[1] == 'True' ? 'unsub-button' : 'sub-button';
+                    document.getElementById('sub-tsu-button').className = data.state[3] == 'True' ? 'unsub-button' : 'sub-button';
                 });
             });
         }
     });
 </script>
 </html>
+
 
 
 
