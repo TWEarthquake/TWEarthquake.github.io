@@ -134,6 +134,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 e.style.backgroundColor = '#060606';
                 e.style.color = '#cccccc';
             });
+            document.querySelectorAll('.sub-button, .unsub-button').forEach(e => {
+                e.style.borderColor = '#333333';
+                e.style.backgroundColor = '#060606';
+            });
             document.querySelectorAll('#warning-location .container').forEach(e => {
                 e.style.backgroundColor = '#060606';
                 e.style.color = 'white';
@@ -177,6 +181,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 e.style.borderColor = '#cccccc';
                 e.style.backgroundColor = '#f9f9f9';
                 e.style.color = '#333333';
+            });
+            document.querySelectorAll('.sub-button, .unsub-button').forEach(e => {
+                e.style.borderColor = '#cccccc';
+                e.style.backgroundColor = '#f9f9f9';
             });
             document.querySelectorAll('#warning-location .container').forEach(e => {
                 e.style.backgroundColor = '#f9f9f9';
@@ -1031,6 +1039,7 @@ function unshow_notice() {
     document.querySelector('.notice').style.display = "none"
     document.querySelector('#legend').style.display = "flex"
 };
+
 
 
 
