@@ -30,6 +30,7 @@ let locationEng = 'Taipei';
 let currentVolume = 1;
 let apiUrl = '';
 let subUrl = '';
+let unsubUrl = '';
 let hasInit = false;
 let userToken = null;
 
@@ -43,6 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
             hasInit = true;
             apiUrl = data.url;
             subUrl = data.subUrl;
+            unsubUrl = data.unsubUrl;
             eqData = data.data;
             document.getElementById('timeLabel').innerText = data.time;
             document.getElementById('loactionLabel').innerHTML = `${data.latitude}°N, ${data.longitude}°E<br>(位於${data.address})`;
@@ -986,6 +988,7 @@ function unshow_notice() {
     document.querySelector('.notice').style.display = "none"
     document.querySelector('#legend').style.display = "flex"
 };
+
 
 
 
