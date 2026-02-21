@@ -300,9 +300,11 @@
 <script>
     function openMenu() {
         document.getElementById("sideMenu").style.width = "250px";
+		document.getElementById("sideMenu").style.border = "1.5px solid black";
     }
     function closeMenu() {
         document.getElementById("sideMenu").style.width = "0";
+		document.getElementById("sideMenu").style.border = "none";
     }
 </script>
 <script type="module">
@@ -323,7 +325,6 @@
     const messaging = getMessaging(app);
 
     const registration = await navigator.serviceWorker.register("/firebase-messaging-sw.js");
-
     await navigator.serviceWorker.ready;
 
     Notification.requestPermission().then(permission => {
@@ -343,6 +344,7 @@
     });
 </script>
 </html>
+
 
 
 
