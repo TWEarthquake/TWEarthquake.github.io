@@ -66,9 +66,9 @@ document.addEventListener("DOMContentLoaded", () => {
         .then(response => response.json())
         .then(data => {
             taiwanGeoJSON = data;
-            updateColor(eqData);
         })
     .catch(e => {});
+    updateColor(eqData);
     
     const townSelectElement = document.getElementById('townSelect');
     
@@ -1039,6 +1039,7 @@ function unshow_notice() {
     document.querySelector('.notice').style.display = "none"
     document.querySelector('#legend').style.display = "flex"
 };
+
 
 
 
