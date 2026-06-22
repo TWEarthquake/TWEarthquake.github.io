@@ -548,6 +548,9 @@ setInterval(() => {
         }
 
         // eew
+        if (data.Earthquake.isDrill) {
+            document.querySelector('.drill').style.display = "flex"
+        }
         if (data.HasEarthquake && shouldPlayAlert) {
             shouldPlayAlert = false;
             if (circle_palert) {
