@@ -464,7 +464,7 @@ setInterval(() => {
             if (!circle_palert && shouldPlayAlert) {
                 updateMarker_palert(maxLocation.lat, maxLocation.lon);
                 Pcircle_palert = L.circle([maxLocation.lat, maxLocation.lon], {
-                    radius: initialRadius * 2,
+                    radius: initialRadius * 1.732,
                     color: lightMode ? 'black' : 'white',
                     weight: 2,
                     fillOpacity: 0
@@ -482,7 +482,7 @@ setInterval(() => {
                 const interval = 25;
                 const updateRadius = () => {
                     currentRadius += (3500 * (interval / 1000));
-                    Pcircle_palert.setRadius(currentRadius * 2);
+                    Pcircle_palert.setRadius(currentRadius * 1.732);
                     circle_palert.setRadius(currentRadius);
 
                     if (currentRadius > 445000) {
@@ -696,7 +696,7 @@ setInterval(() => {
             color = earthquake.level == '0' ? 'white' : levelColor[earthquake.level]
           
             Pcircle = L.circle([centerLat, centerLon], {
-                radius: initialRadius * 2,
+                radius: initialRadius * 1.732,
                 color: lightMode ? 'black' : 'white',
                 weight: 2,
                 fillOpacity: 0
@@ -714,7 +714,7 @@ setInterval(() => {
             const interval = 25;
             const updateRadius = () => {
                 currentRadius += (expandSpeed * (interval / 1000));
-                Pcircle.setRadius(currentRadius * 2);
+                Pcircle.setRadius(currentRadius * 1.732);
                 circle.setRadius(currentRadius);
 
                 if (currentRadius > 445000) {
@@ -971,7 +971,7 @@ function replay() {
                 color = earthquake.level == '0' ? 'white' : levelColor[earthquake.level]
               
                 Pcircle = L.circle([centerLat, centerLon], {
-                    radius: initialRadius * 2,
+                    radius: initialRadius * 1.732,
                     color: lightMode ? 'black' : 'white',
                     weight: 2,
                     fillOpacity: 0
@@ -989,7 +989,7 @@ function replay() {
                 const interval = 25;
                 const updateRadius = () => {
                     currentRadius += (expandSpeed * (interval / 1000));
-                    Pcircle.setRadius(currentRadius * 2);
+                    Pcircle.setRadius(currentRadius * 1.732);
                     circle.setRadius(currentRadius);
 
                     if (currentRadius > 445000) {
