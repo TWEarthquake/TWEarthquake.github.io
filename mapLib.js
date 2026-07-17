@@ -25,9 +25,8 @@ const tsunamiColors = {
     'N': '#4e8cff',
     '小於0.3公尺': '#00a355',
     '0.3至1公尺': '#fcd64b',
-    '1至3公尺': '#fe520f', 
-    '3至6公尺': '#CE0000',
-    '大於6公尺': '#6E30A1'
+    '1至3公尺': '#fe520f',
+    '大於3公尺': '#6E30A1'
 };
 
 function updateMarker(lat, lon) {
