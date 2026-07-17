@@ -279,7 +279,7 @@ const soundFiles = [
     "2x", "3x", "4x", "5x", "6x", "7x", "8x", "9x",
     "arrive", "ding", "notify",
     "Plevel0", "Plevel1", "Plevel2", "Plevel3", "Plevel4", "Plevel5", "Plevel6", "Plevel7", "Plevel8", "Plevel9",
-    "palert0", "palert1", "palert2", "palert3",
+    //"palert0", "palert1", "palert2", "palert3",
     "tsunami"
 ];
 
