@@ -131,7 +131,7 @@ function updateColor(data) {
                 fillColor: levelColors[level],
                 color: "black",
                 weight: 0.45,
-                fillOpacity: 0.7
+                fillOpacity: 0.75
             };
         }
     }).addTo(map);
