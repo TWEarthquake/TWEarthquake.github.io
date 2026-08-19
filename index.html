@@ -402,6 +402,10 @@
         genToken()
         document.getElementById("notificationButton").style.display = "none";
     });
+	const isStandalone = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
+    if (isStandalone && Notification.permission === "granted") {
+        getToken()
+    }
 
     Notification.requestPermission().then(permission => {
         if (permission === "granted") {
