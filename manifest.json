@@ -3,7 +3,7 @@
     "short_name": "臺灣地震速報",
     "description": "臺灣地震速報 - 線上",
 	"lang": "zh-Hant-TW",
-    "start_url": "/pwa",
+    "start_url": "/",
     "theme_color": "#000000",
     "background_color": "#ffffff",
     "display": "standalone",
