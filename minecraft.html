@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Minecraft ✗ 地震速報</title>
-    <link rel="icon" href="Web/f256x256.png" />
+    <link rel="icon" href="./f256x256.png" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
 </head>
@@ -182,7 +182,7 @@
             <br>
             ⚠️ 使用前請詳閱<a href="/about" target="_blank">「關於地震速報」</a>，如繼續使用，即視為了解且同意該頁面內容。
         </div>
-        <img src="Web/mceew.png" alt="插件截圖" class="screenshot">
+        <img src="./mceew.png" alt="插件截圖" class="screenshot">
         </section>
 
         <section>
@@ -501,7 +501,7 @@ boolean higher4 = level1.isBiggerThan(7);        // false
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script>hljs.highlightAll();</script>
-<script src='Web/locations.js'></script>
+<script src='./locations.js'></script>
 <script>
     document.querySelectorAll('.copy-btn').forEach((btn) => {
       btn.addEventListener('click', () => {
@@ -519,7 +519,7 @@ boolean higher4 = level1.isBiggerThan(7);        // false
         console.log('%c \n如果你知道你在幹嘛, 歡迎加入我們 \\(.D˙)/', 'font-size: 23px');
         console.log('%c \nCopyrights © 2024-2026, Chang Yu-Hsi. All rights reserved.', 'color: rgba(237, 237, 237, 0.5)');
 
-        fetch('Web/TWN_TOWN_low.json')
+        fetch('./TWN_TOWN_low.json')
         .then(response => response.json())
         .then(data => {
             taiwanGeoJSON = data;
