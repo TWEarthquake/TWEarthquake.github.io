@@ -148,7 +148,7 @@ body {
     top: 75%;
     left: 85%;
     transform: translate(-50%, -45%);
-    font-size: clamp(28px, 10vw, 90px);
+    font-size: clamp(28px, 15vw, 90px);
     font-weight: 800;
     color: rgba(0, 0, 0, 0.045);
     pointer-events: none;
