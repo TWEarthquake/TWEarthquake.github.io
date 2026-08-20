@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minecraft ✗ 地震速報</title>
+    <link rel="icon" href="Web/f256x256.png" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
+</head>
+<style>
+    body {
+        font-family: "Segoe UI", "Microsoft JhengHei", sans-serif;
+        margin: 0;
+        padding: 0;
+        background: #fafafa;
+        color: #333;
+    }
+    header {
+        background: linear-gradient(90deg, #ff4d4f, #b22222);
+        color: white;
+        padding: 40px 20px;
+        text-align: center;
+    }
+    header h1 {
+        margin: 0;
+        font-size: 2.5rem;
+    }
+    header p {
+        font-size: 1.2rem;
+        margin-top: 10px;
+    }
+    main {
+        max-width: 900px;
+        margin: 40px auto;
+        padding: 0 20px;
+    }
+    section {
+        margin-bottom: 40px;
+    }
+    h2 {
+        border-left: 5px solid #ff4d4f;
+        padding-left: 10px;
+        font-size: 1.8rem;
+    }
+    .screenshot {
+        display: block;
+        max-width: 100%;
+        margin: 20px 0;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+    .btn {
+        display: inline-block;
+        padding: 20px 30px;
+        margin-top: 20px;
+        font-size: 24px;
+        text-decoration: none;
+        background: #ff4d4f;
+        color: white;
+        border-radius: 8px;
+        transition: 0.3s;
+    }
+    .btn:hover {
+        background: #b22222;
+    }
+    footer {
+        text-align: center;
+        padding: 20px;
+        background: #eee;
+        font-size: 14px;
+        color: #555;
+    }
+    .alert-box {
+        background: #fff3f3;
+        border: 1px solid #ff4d4f;
+        padding: 15px;
+        border-radius: 8px;
+        margin: 15px 0;
+    }
+    .tip-box {
+        background: #fff7cc;
+        border: 1px solid #fee542;
+        padding: 15px;
+        border-radius: 8px;
+        margin: 15px 0;
+    }
+    .code-block {
+        position: relative;
+        margin-bottom: 20px;
+    }
+    .copy-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        padding: 8px 14px;
+        font-size: 14px;
+        border: none;
+        border-radius: 5px;
+        background-color: #007bff;
+        color: white;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+    .copy-btn:hover {
+        background-color: #0056b3;
+    }
+    select {
+        width: 90px;
+        padding: 8px 4px;
+        border: 1.5px solid #ccc;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+        font-size: 16px;
+        color: #333;
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        cursor: pointer;
+        outline: none;
+        transition: all 0.3s ease;
+    }
+
+    select::-ms-expand {
+        display: none;
+    }
+
+    select::-webkit-scrollbar {
+        width: 0;
+    }
+
+    select::after {
+        content: '\25BC';
+        font-size: 18px;
+        position: absolute;
+        top: 15px;
+        right: 10px;
+        pointer-events: none;
+    }
+
+    select:focus {
+        border-color: #007BFF;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    }
+
+    option {
+        text-align: center;
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    option:checked {
+        background-color: #007BFF;
+        color: white;
+    }
+</style>
+<body>
+    <header>
+        <h1>⚡ Minecraft ✗ 地震速報</h1>
+        <p>訊息提示 ✗ 語音播報 ✗ API</p>
+    </header>
+    <main>
+        <section>
+        <h2>📖 插件介紹</h2>
+        <p>
+            當有地震發生時，插件能立即推送通知，顯示震央位置、規模與震度資訊。
+        </p>
+        <p>
+            使用者可以<strong>自行設定所在地與預警震度</strong>，當地震達到或超過該設定值時，才會觸發提醒，避免過度打擾。
+        </p>
+        <p>
+            插件內建<strong>語音播報功能</strong>，可在第一時間以語音提醒使用者，讓你即使沒有盯著螢幕，也能即時獲得地震警報。
+        </p>
+        <p>
+            當地震可能引發<strong>海嘯</strong>時，插件將立即發送<strong style="color:#d32f2f;">海嘯警報</strong>，並顯示預估海嘯到達時間與影響範圍，提醒使用者保持警戒。
+        </p>
+        <p>
+            此外，插件支援<strong>API 調用</strong>，方便其他插件或服務串接。
+        </p>
+        <div class="alert-box">
+            ⚠️ 提醒：本插件資料來源於 <strong>中央氣象署 (CWA)</strong>，資訊僅供參考。
+            <br>
+            ⚠️ 使用前請詳閱<a href="/about" target="_blank">「關於地震速報」</a>，如繼續使用，即視為了解且同意該頁面內容。
+        </div>
+        <img src="Web/mceew.png" alt="插件截圖" class="screenshot">
+        </section>
+
+        <section>
+        <h2>✨ 功能特色</h2>
+        <ul>
+            <li>⚡ 即時地震速報推送</li>
+            <li>📍 顯示震央位置與詳細資訊</li>
+            <li>🔔 自動發出音效與<strong>語音播報提醒</strong></li>
+            <li>🌊 <strong>海嘯警報功能</strong>：提供到達時間與影響區域</li>
+            <li>🌐 支援台灣主要城市與區域</li>
+            <li>⚙️ <strong>自訂所在地與預警震度</strong></li>
+            <li>🛠️ 提供<strong>API 介面</strong>，可供外部應用程式使用</li>
+        </ul>
+        </section>
+
+        <section>
+        <h2>📥 下載與安裝</h2>
+        <p>你可以從以下來源取得最新版本：</p>
+        <p><strong>💡 支援版本：</strong> Minecraft 1.21.X 或以下</p>
+        <a href="https://twearthquake.github.io/EarthquakeEarlyWarning.jar" class="btn" target="_blank"><i class="fas fa-download"></i> 立即下載</a>
+        <p>下載後請 <a href="https://linktr.ee/tw.earthquake" target="_blank">聯絡開發人員</a> 以提供後續步驟 (建議使用Discord)</p>
+        </section>
+        
+        <section>
+        <h2>🎧 安裝材質包</h2>
+        <p>此外，請安裝以下材質包，以供播放語音及音效</p>
+        <p><strong>💡 支援版本：</strong> Minecraft 1.21.X 或以下</p>
+        <a href="https://twearthquake.github.io/EarthquakeEarlyWarning.zip" class="btn" target="_blank"><i class="fas fa-download"></i> 立即下載</a>
+        </section>
+
+        <section>
+        <h2>🛠️ Developers</h2>
+        <p>
+            To use this plugin api in your project, you need to first include the JAR file manually:
+        </p>
+        <ol>
+            <li>Download the plugin JAR file (<code>EarthquakeEarlyWarning.jar</code>).</li>
+            <li>Copy the JAR file into your project's <code>libs</code> directory (create it if it doesn't exist).</li>
+            <li>Add the JAR to your project's classpath:
+                <ul>
+                    <li>If using an IDE like Eclipse: Right-click your project → Properties → Java Build Path → Libraries → Add JARs → select the JAR.</li>
+                    <li>
+                        If using IntelliJ IDEA: File → Project Structure → Modules → Dependencies → + → JARs or directories → select the JAR. And than add the dependency to your pom.xml
+                        <div class="code-block">
+                            <button class="copy-btn"><i class="fas fa-copy"></i> 複製</button>
+                            <pre><code class="language-xml">
+&lt;dependency>
+    &lt;groupId>tw.earthquake&lt;/groupId>
+    &lt;artifactId>EarthquakeEarlyWarning&lt;/artifactId>
+    &lt;version>1.0-SNAPSHOT&lt;/version>
+    &lt;scope>system&lt;/scope>
+    &lt;systemPath>FILE_PATH/EarthquakeEarlyWarning.jar&lt;/systemPath>
+&lt;/dependency>
+                            </code></pre>
+                        </div>
+                    </li>
+                    <li>If using command line: include it when compiling, e.g.,
+                        <pre><code>javac -cp libs/plugin-name.jar src/MyApp.java</code></pre>
+                    </li>
+                </ul>
+            </li>
+            <li>Once the JAR is added to the classpath, you can import the plugin classes and use its API in your code.</li>
+        </ol>
+        <div class="tip-box">
+        ❗ Don't forget to add depend in your plugin.yml file.<pre><code class="language-yml">depend: [ EarthquakeEarlyWarning ]</code></pre>
+    </div>
+        <p style="font-size: 24px;"><strong>Class, Event & Example</strong></p>
+        <p style="font-size: 20px;">📌 Event: <strong>earthquakeReceived</strong></p>
+        <p>
+            The <code>earthquakeReceived</code> event is triggered whenever a new earthquake eew is received.
+            You can listen to this event to handle real-time earthquake data in your plugin.
+        </p>
+        <p>• Event Usage Example</p>
+        <div class="code-block">
+            <button class="copy-btn"><i class="fas fa-copy"></i> 複製</button>
+            <pre><code class="language-java">
+// Listen for the earthquakeReceived event
+@EventHandler
+public void onEarthquakeReceived(earthquakeReceived event) {
+
+    // Retrieve the earthquake data, including the level and countdown seconds, for the location "Taipei".
+    // You can check the permitted locations below.
+    LocationData taipei = event.getLocationData("Taipei");
+    int second = taipei.getSecond();
+    Level level = taipei.getLevel();
+
+    double latitude = event.getLatitude();     //e.g. 22.53
+    double longitude = event.getLongitude();   //e.g. 122.61
+    double magnitude = event.getMagnitude();   //e.g. 4.5
+    String address = event.getAddress();       //e.g. "台北市中正區公園路64號"
+    int depth = event.getDepth();              //e.g. 10
+    int time = event.getTime();                //e.g. 1758482415
+    Level maxLevel = event.getMaxLevel();      // introducing below
+
+    // DO SOMETHING ELSE...
+}
+            </code></pre>
+        </div>
+        <ul>
+            <li><strong><code>getLocationData(String location)</code></strong> – Returns the earthquake data, including the level and countdown seconds, for the location "location" as a <code>LocationData</code> object.</li>
+            <li><strong><code>getLatitude()</code></strong> – Returns the latitude of the earthquake epicenter.</li>
+            <li><strong><code>getLongitude()</code></strong> – Returns the longitude of the earthquake epicenter.</li>
+            <li><strong><code>getMagnitude()</code></strong> – Returns the magnitude of the earthquake in Mw.</li>
+            <li><strong><code>getAddress()</code></strong> – Returns the fuzzy address of the earthquake epicenter.</li>
+            <li><strong><code>getDepth()</code></strong> – Returns the depth of the earthquake in kilometers.</li>
+            <li><strong><code>getTime()</code></strong> – Returns the timestamp of the earthquake in UNIX format.</li>
+            <li><strong><code>getMaxLevel()</code></strong> – Returns the estimated maximum intensity for this earthquake.</li>
+            <li><strong><code>setCancelled(boolean cancel)</code></strong> – Cancels the propagation of the event if set to <code>true</code>. Useful when you want to cancel this eew event, or stop other plugins or listeners from handling this event.</li>
+            <li><strong><code>isCancelled()</code></strong> – Returns whether the event has been cancelled by any listener</li>
+        </ul>
+    <p style="font-size: 20px;">📌 Event: <strong>tsunamiReceived</strong></p>
+        <p>
+            The <code>tsunamiReceived</code> event is triggered whenever a new tsunami warning is received.
+            You can listen to this event to handle real-time tsunami data in your plugin.
+        </p>
+        <p>• Event Usage Example</p>
+        <div class="code-block">
+            <button class="copy-btn"><i class="fas fa-copy"></i> 複製</button>
+            <pre><code class="language-java">
+// Listen for the tsunamiReceived event
+@EventHandler
+public void onTsunamiReceived(tsunamiReceived event) {
+
+    // Retrieve the tsunami data, including the arrival time and wave height, for the area "北部沿海地區".
+    // The permitted areas are the "北部沿海地區", "東北沿海地區", "東部沿海地區", "東南沿海地區", "西南沿海地區" and "海峽沿海地區".
+    AreaData northArea = event.getAreaData("北部沿海地區");
+    String arrivalTime = northArea.getArrivalTime();
+    String waveHeight = northArea.getWaveHeight();
+
+    double latitude = event.getLatitude();     //e.g. 53.0
+    double longitude = event.getLongitude();   //e.g. 160.8
+    double magnitude = event.getMagnitude();   //e.g. 7.8
+    String address = event.getAddress();       //e.g. "俄羅斯堪察加半島"
+    String source = event.getSource();         //e.g. "美國太平洋海嘯警報中心"
+    String content = event.getContent();       //e.g. "頃獲太平洋海嘯警報中心通報...注意海浪突然湧升所造成的危害。"
+    int depth = event.getDepth();              //e.g. 10
+    String time = event.getTime();             //e.g. "2025-09-19 02:58:00"
+
+    // DO SOMETHING ELSE...
+}
+            </code></pre>
+        </div>
+        <ul>
+            <li><strong><code>getAreaData(String area)</code></strong> – Returns the tsunami data, including the arrival time and wave height, for the area "area" as a <code>AreaData</code> object.</li>
+            <li><strong><code>getLatitude()</code></strong> – Returns the latitude of the earthquake epicenter.</li>
+            <li><strong><code>getLongitude()</code></strong> – Returns the longitude of the earthquake epicenter.</li>
+            <li><strong><code>getMagnitude()</code></strong> – Returns the magnitude of the earthquake in Mw.</li>
+            <li><strong><code>getAddress()</code></strong> – Returns the fuzzy address of the earthquake epicenter.</li>
+            <li><strong><code>getSource()</code></strong> – Returns the tsunami warning source.</li>
+            <li><strong><code>getContent()</code></strong> – Returns the tsunami warning content.</li>
+            <li><strong><code>getDepth()</code></strong> – Returns the depth of the earthquake in kilometers.</li>
+            <li><strong><code>getTime()</code></strong> – Returns the timestamp of the earthquake in "YYYY-MM-DD HH:mm:SS" format.</li>
+            <li><strong><code>setCancelled(boolean cancel)</code></strong> – Cancels the propagation of the event if set to <code>true</code>. Useful when you want to cancel this tsunami warning event, or stop other plugins or listeners from handling this event.</li>
+            <li><strong><code>isCancelled()</code></strong> – Returns whether the event has been cancelled by any listener</li>
+        </ul>
+    <p style="font-size: 20px;">📌 Class: <strong>LocationData</strong></p>
+    <p>
+        The <code>LocationData</code> class represents earthquake information for a specific location.
+        It allows you to access key details such as the estimated intensity and the time in seconds for the earthquake alert.
+    </p>
+    <div class="alert-box">
+        ⚠️ <strong>Important:</strong> LocationData instances <em>must</em> be accessed inside the <code>earthquakeReceived</code> event. Using it elsewhere may result in errors.
+    </div>
+    <p>• Usage Example</p>
+    <div class="code-block">
+        <button class="copy-btn"><i class="fas fa-copy"></i> 複製</button>
+        <pre><code class="language-java">
+LocationData taipei = event.getLocationData("Taipei");
+int second = taipei.getSecond();      // e.g. 12
+Level level = taipei.getLevel();      // introducing below
+        </code></pre>
+    </div>
+    <ul>
+        <li><code>getLevel()</code> – Returns the predicted earthquake intensity for this location as a <code>Level</code> object.</li>
+        <li><code>getSecond()</code> – Returns the countdown time in seconds for the earthquake alert at this location as an <code>int</code>.</li>
+    </ul>
+    <p>
+        This class is useful for handling location-specific earthquake data within the plugin's API, 
+        allowing developers to access real-time intensity and timing information for different regions.
+    </p>
+    <p><strong>Available location parameters can be found below:</strong></p>
+    <div>
+        <select id="citySelect">
+            <option value="Taipei" selected>台北市</option>
+            <option value="NewTaipei">新北市</option>
+            <option value="Taoyuan">桃園市</option>
+            <option value="Hsinchu">新竹市(縣)</option>
+            <option value="Miaoli">苗栗縣</option>
+            <option value="Taichung">台中市</option>
+            <option value="Nantou">南投縣</option>
+            <option value="Changhua">彰化縣</option>
+            <option value="Yunlin">雲林縣</option>
+            <option value="Chiayi">嘉義市(縣)</option>
+            <option value="Tainan">台南市</option>
+            <option value="Kaohsiung">高雄市</option>
+            <option value="Pingtung">屏東縣</option>
+            <option value="Keelung">基隆市</option>
+            <option value="Yilan">宜蘭縣</option>
+            <option value="Hualien">花蓮縣</option>
+            <option value="Taitung">台東縣</option>
+            <option value="Lianjiang">連江縣</option>
+            <option value="Kinmen">金門縣</option>
+            <option value="Penghu">澎湖縣</option>
+        </select>
+        <select id="townSelect">
+                <option value="" selected>信義區</option>
+                <option value="1">松山區</option>
+                <option value="2">大安區</option>
+                <option value="3">中山區</option>
+                <option value="4">中正區</option>
+                <option value="5">大同區</option>
+                <option value="6">萬華區</option>
+                <option value="7">文山區</option>
+                <option value="8">南港區</option>
+                <option value="9">內湖區</option>
+                <option value="10">士林區</option>
+                <option value="11">北投區</option>
+        </select>
+        <strong>Parameter: </strong><span id="parameter">Taipei</span>
+    </div>
+    
+    <p style="font-size: 20px;">📌 Class: <strong>AreaData</strong></p>
+    <p>
+        The <code>AreaData</code> class represents tsunami information for a specific area.
+        It allows you to access key details such as the estimated arrival time and wave height for the tsunami warning.
+    </p>
+    <div class="alert-box">
+        ⚠️ <strong>Important:</strong> AreaData instances <em>must</em> be accessed inside the <code>tsunamiReceived</code> event. Using it elsewhere may result in errors.
+    </div>
+    <p>• Usage Example</p>
+    <div class="code-block">
+        <button class="copy-btn"><i class="fas fa-copy"></i> 複製</button>
+        <pre><code class="language-java">
+AreaData northArea = event.getAreaData("北部沿海地區");
+String arrivalTime = northArea.getArrivalTime();    // "2025-07-30 13:41:00"
+String waveHeight = northArea.getWaveHeight();      // "小於0.3公尺"
+        </code></pre>
+    </div>
+    <ul>
+        <li><code>getArrivalTime()</code> – Returns the arrival time for this area.</li>
+        <li><code>getWaveHeight()</code> – Returns the wave height for this area. If there is no wave height for this area, returns "注意"</li>
+    </ul>
+    <p>
+        This class is useful for handling area-specific tsunami data within the plugin's API, 
+        allowing developers to access real-time arrival time and wave height information for different regions.
+    </p>
+    <p><strong>Available area parameters can be found below:</strong></p>
+    <p>
+        <pre>"北部沿海地區", "東北沿海地區", "東部沿海地區", "東南沿海地區", "西南沿海地區", "海峽沿海地區"</pre>
+    </p>
+    <p style="font-size: 20px;">📌 Class: <strong>Level</strong></p>
+    <p>
+        The <code>Level</code> class represents the predicted earthquake intensity for a specific location.
+        It provides convenient methods to retrieve the intensity as a string or integer and to compare intensity levels.
+    </p>
+    <div class="code-block">
+        <button class="copy-btn"><i class="fas fa-copy"></i> 複製</button>
+        <pre><code class="language-java">
+// Create Level objects
+Level level1 = new Level("3 級");
+Level level2 = new Level(2);       // corresponds to "2 級"
+Level level3 = new Level("5 弱");
+        </code></pre>
+    </div>
+    <ul>
+        <li><code>Level(String level)</code> – Creates a Level object using a string, e.g., <code>"3 級", "5 弱"</code>.</li>
+        <li><code>Level(int level)</code> – Creates a Level object using an integer. If the integer is invalid, it defaults to <code>"0 級"</code>. You can check the permitted integer below.</li>
+    </ul>
+    <div class="code-block">
+        <button class="copy-btn"><i class="fas fa-copy"></i> 複製</button>
+        <pre><code class="language-java">
+// Get values
+int index = level1.getInt();            // 3
+String levelStr = level1.getString();   // "3 級"
+
+// Compare levels
+boolean higher1 = level1.isBiggerThan(2);        // true
+boolean higher2 = level1.isBiggerThan("2 級");   // true
+boolean higher3 = level1.isBiggerThan(level2);   // true
+boolean higher4 = level1.isBiggerThan(7);        // false
+        </code></pre>
+    </div>
+    <ul>
+        <li><code>getInt()</code> – Returns the level as a integer.</li>
+        <li><code>getString()</code> – Returns the level as a string, e.g., <code>"3 級", "5 弱"</code>.</li>
+        <li><code>isBiggerThan(int level)</code> – Returns <code>true</code> if this level is greater than or equal to the given integer level.</li>
+        <li><code>isBiggerThan(String level)</code> – Returns <code>true</code> if this level is greater than or equal to the given level string.</li>
+        <li><code>isBiggerThan(Level level)</code> – Returns <code>true</code> if this level is greater than or equal to another Level object.</li>
+    </ul>
+    <div class="tip-box">
+        ❗ Integer To Level Mapping
+        <ul>
+            <li>0 → "0 級"</li>
+            <li>1 → "1 級"</li>
+            <li>2 → "2 級"</li>
+            <li>3 → "3 級"</li>
+            <li>4 → "4 級"</li>
+            <li>5 → "5 弱"</li>
+            <li>6 → "5 強"</li>
+            <li>7 → "6 弱"</li>
+            <li>8 → "6 強"</li>
+            <li>9 → "7 級"</li>
+        </ul>
+    </div>
+    <p>
+        This class is designed to make it easy to compare earthquake intensity levels and retrieve the level
+        in both string and integer formats.
+    </p>
+    </section>
+    </main>
+    <footer>
+        本服務使用音效係由「地牛Wake Up!」授權使用
+        <br>
+        Copyrights &copy; 2024-2025, Chang Yu-Hsi. All rights reserved.
+    </footer>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+<script src='Web/locations.js'></script>
+<script>
+    document.querySelectorAll('.copy-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const code = btn.nextElementSibling.innerText;
+        navigator.clipboard.writeText(code).then(() => {
+          btn.innerText = "已複製!";
+          setTimeout(() => btn.innerText = "複製", 1500);
+        });
+      });
+    });
+
+    let taiwanGeoJSON = null
+    document.addEventListener("DOMContentLoaded", () => {
+        console.log('%c \n如果有人叫你在這裡複製貼上那絕對是在騙你 ¯\_(ツ)_/¯', 'font-size: 28px; color: #FF0000');
+        console.log('%c \n如果你知道你在幹嘛, 歡迎加入我們 \\(.D˙)/', 'font-size: 23px');
+        console.log('%c \nCopyrights © 2024-2026, Chang Yu-Hsi. All rights reserved.', 'color: rgba(237, 237, 237, 0.5)');
+
+        fetch('Web/TWN_TOWN_low.json')
+        .then(response => response.json())
+        .then(data => {
+            taiwanGeoJSON = data;
+        })
+        .catch(e => {});
+
+        const townSelectElement = document.getElementById('townSelect');
+    
+        document.getElementById('citySelect').addEventListener("change", (e) => {
+            locationEng = e.target.value
+            townSelectElement.innerHTML = '';
+            const towns = Object.keys(locationAndTowns[locationEng]);
+
+            towns.forEach((town, index) => {
+                const option = document.createElement('option');
+                option.textContent = town;
+                
+                if (index === 0) {
+                    option.value = '';
+                } else {
+                    option.value = index.toString();
+                }
+                
+                townSelect.appendChild(option);
+            });
+
+            updateLocation()
+        });
+        
+        townSelectElement.addEventListener("change", updateLocation);
+
+        function updateLocation() {
+            const parameter = document.getElementById('parameter');
+            parameter.innerHTML = `${document.getElementById('citySelect').value}${townSelectElement.value}`
+        }
+    });
+
+    document.oncontextmenu = () => {
+        return false
+    };
+
+    document.onpaste = () => {
+        return false
+    };
+
+    document.oncut = () => {
+        return false
+    };
+
+    window.addEventListener('keydown', (e) => {
+        if ((e.ctrlKey && e.shiftKey && e.key === 'I') || e.key === 'F12') {
+            e.preventDefault()
+        }
+    });
+</script>
+</html>
