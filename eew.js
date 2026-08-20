@@ -211,10 +211,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     const isStandalone = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
-    if (isStandalone) {
-        document.getElementById("setting").style.display = "none"
-        document.getElementById("settingTitle").style.display = "none"
-    }
     if (isStandalone && Notification.permission !== "granted") {
         document.getElementById("notificationButton").style.display = "block"
         alert("請點擊畫面右側的「開啟通知」，以確保能即時收到地震通知。")
