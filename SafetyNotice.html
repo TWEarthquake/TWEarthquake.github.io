@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>安全通報</title>
+    <link rel="icon" href="/f256x256.png" />
+    <style>
+        :root {
+            --safe: #16a34a;
+            --safe-light: #ecfdf3;
+            --unsafe: #dc2626;
+            --unsafe-light: #fef2f2;
+            --text: #182230;
+            --secondary: #64748b;
+            --border: #e5eaf0;
+            --card: rgba(255, 255, 255, 0.92);
+            --background: #f4f7fb;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html,
+        body {
+            margin: 0;
+            min-height: 100%;
+            font-family:
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                "PingFang TC",
+                "Microsoft JhengHei",
+                sans-serif;
+            background: var(--background);
+            color: var(--text);
+        }
+
+        body {
+            min-height: 100dvh;
+        }
+
+        .app {
+            width: 100%;
+            max-width: 760px;
+            min-height: 100dvh;
+            margin: 0 auto;
+            padding:
+                calc(18px + env(safe-area-inset-top))
+                16px
+                calc(24px + env(safe-area-inset-bottom));
+        }
+
+        .page-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 18px;
+        }
+
+        .header-icon {
+            width: 48px;
+            height: 48px;
+            flex: 0 0 48px;
+            border-radius: 16px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            background: linear-gradient(135deg, #e0ecff, #ffffff);
+            box-shadow: 0 5px 16px rgba(51, 87, 140, 0.1);
+        }
+
+        .page-header h1 {
+            margin: 0;
+            font-size: 25px;
+            letter-spacing: -0.5px;
+        }
+
+        .page-header p {
+            margin: 3px 0 0;
+            color: var(--secondary);
+            font-size: 13px;
+        }
+
+        #loading {
+            min-height: 60dvh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            color: var(--secondary);
+            gap: 14px;
+        }
+
+        .spinner {
+            width: 32px;
+            height: 32px;
+            border: 3px solid #dce5ef;
+            border-top-color: #64748b;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        #empty-state {
+            display: none;
+            min-height: calc(100dvh - 130px);
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+            padding: 30px 15px;
+        }
+
+        .empty-icon {
+            width: 92px;
+            height: 92px;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 42px;
+            box-shadow: 0 10px 30px rgba(30, 41, 59, 0.08);
+            margin-bottom: 20px;
+        }
+
+        #empty-state h2 {
+            margin: 0;
+            font-size: 22px;
+        }
+
+        #empty-state p {
+            margin: 9px 0 0;
+            color: var(--secondary);
+            font-size: 14px;
+        }
+
+        #report-content {
+            display: none;
+        }
+
+        .event-card {
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(255, 255, 255, 0.98),
+                    rgba(245, 248, 252, 0.95)
+                );
+            border: 1px solid var(--border);
+            border-radius: 22px;
+            padding: 20px;
+            box-shadow: 0 8px 30px rgba(30, 41, 59, 0.07);
+            margin-bottom: 16px;
+        }
+
+        .event-label {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            color: #b45309;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 9px;
+        }
+
+        .event-label::before {
+            content: "";
+            width: 8px;
+            height: 8px;
+            background: #f59e0b;
+            border-radius: 50%;
+            box-shadow: 0 0 0 5px rgba(245, 158, 11, 0.12);
+        }
+
+        #event-title {
+            margin: 0;
+            font-size: clamp(21px, 6vw, 28px);
+            line-height: 1.35;
+            letter-spacing: -0.4px;
+            word-break: break-word;
+        }
+
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .summary-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 17px;
+            padding: 15px;
+        }
+
+        .summary-card .label {
+            color: var(--secondary);
+            font-size: 13px;
+            margin-bottom: 5px;
+        }
+
+        .summary-card .number {
+            font-size: 26px;
+            font-weight: 750;
+            letter-spacing: -0.5px;
+        }
+
+        .summary-card.safe .number {
+            color: var(--safe);
+        }
+
+        .summary-card.unsafe .number {
+            color: var(--unsafe);
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 0 2px 11px;
+        }
+
+        .section-title h2 {
+            margin: 0;
+            font-size: 17px;
+        }
+
+        #total-count {
+            color: var(--secondary);
+            font-size: 13px;
+        }
+
+        #user-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .user-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 15px;
+            box-shadow: 0 4px 16px rgba(30, 41, 59, 0.04);
+            overflow: hidden;
+        }
+
+        .user-main {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .status-icon {
+            width: 44px;
+            height: 44px;
+            flex: 0 0 44px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 14px;
+            font-size: 21px;
+        }
+
+        .status-icon.safe {
+            background: var(--safe-light);
+        }
+
+        .status-icon.unsafe {
+            background: var(--unsafe-light);
+        }
+
+        .user-info {
+            min-width: 0;
+            flex: 1;
+        }
+
+        .user-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .user-id {
+            font-size: 16px;
+            font-weight: 700;
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .status-badge {
+            flex: 0 0 auto;
+            padding: 5px 9px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .status-badge.safe {
+            color: #15803d;
+            background: var(--safe-light);
+        }
+
+        .status-badge.unsafe {
+            color: #b91c1c;
+            background: var(--unsafe-light);
+        }
+
+        .location {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 7px;
+            color: var(--secondary);
+            font-size: 13px;
+            word-break: break-word;
+        }
+
+        .message {
+            margin-top: 13px;
+            padding: 11px 12px;
+            background: #f7f9fc;
+            border-radius: 12px;
+            color: #475569;
+            font-size: 14px;
+            line-height: 1.55;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .message:empty {
+            display: none;
+        }
+
+        #error-state {
+            display: none;
+            min-height: 60dvh;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+            color: var(--secondary);
+        }
+
+        #error-state .error-icon {
+            font-size: 40px;
+            margin-bottom: 12px;
+        }
+
+        #error-state h2 {
+            margin: 0;
+            color: var(--text);
+            font-size: 20px;
+        }
+
+        #error-state p {
+            margin: 8px 0 16px;
+            font-size: 14px;
+        }
+
+        #retry-button {
+            border: 0;
+            border-radius: 12px;
+            padding: 11px 18px;
+            background: #2563eb;
+            color: white;
+            font: inherit;
+            cursor: pointer;
+        }
+
+        #update-time {
+            margin-top: 18px;
+            text-align: center;
+            color: #94a3b8;
+            font-size: 12px;
+        }
+
+        @media (min-width: 640px) {
+            .app {
+                padding-left: 24px;
+                padding-right: 24px;
+            }
+
+            .summary {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="app">
+
+        <header class="page-header">
+            <div class="header-icon">🛡️</div>
+            <div>
+                <h1>安全通報</h1>
+                <p>即時確認安全狀態</p>
+            </div>
+        </header>
+
+        <div id="loading">
+            <div class="spinner"></div>
+            <span>正在取得通報資訊...</span>
+        </div>
+
+        <section id="empty-state">
+            <div class="empty-icon">✓</div>
+            <h2>目前無可通報項目</h2>
+        </section>
+
+        <section id="report-content">
+            <div class="event-card">
+                <div class="event-label">目前通報項目</div>
+                <h2 id="event-title"></h2>
+            </div>
+
+            <div class="summary">
+                <div class="summary-card safe">
+                    <div class="label">已確認安全</div>
+                    <div class="number" id="safe-count">0</div>
+                </div>
+
+                <div class="summary-card unsafe">
+                    <div class="label">回報不安全</div>
+                    <div class="number" id="unsafe-count">0</div>
+                </div>
+            </div>
+
+            <div class="section-title">
+                <h2>通報狀態</h2>
+                <span id="total-count">共 0 人</span>
+            </div>
+
+            <div id="user-list"></div>
+
+            <div id="update-time"></div>
+        </section>
+
+        <section id="error-state">
+            <div class="error-icon">⚠️</div>
+            <h2>無法取得通報資訊</h2>
+            <p>請確認網路連線後再試一次</p>
+            <button id="retry-button">重新載入</button>
+        </section>
+
+    </main>
+
+    <script>
+        document.oncontextmenu = () => {
+            return false
+        };
+
+        document.oncopy = () => {
+            return false
+        };
+
+        document.onpaste = () => {
+            return false
+        };
+
+        document.oncut = () => {
+            return false
+        };
+
+        window.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey && e.shiftKey && e.key === 'I') || e.key === 'F12') {
+                e.preventDefault()
+            }
+        });
+
+        document.addEventListener("DOMContentLoaded", () => {
+            console.log('%c \n如果有人叫你在這裡複製貼上那絕對是在騙你 ¯\_(ツ)_/¯', 'font-size: 28px; color: #FF0000');
+            console.log('%c \n如果你知道你在幹嘛, 歡迎加入我們 \\(.D˙)/', 'font-size: 23px');
+            console.log('%c \nCopyrights © 2024-2026, Chang Yu-Hsi. All rights reserved.', 'color: rgba(237, 237, 237, 0.5)');
+        });
+
+        const API_URL = "https://twearthquake.zapto.org:30007/api/gsn";
+
+        const loading = document.getElementById("loading");
+        const emptyState = document.getElementById("empty-state");
+        const reportContent = document.getElementById("report-content");
+        const errorState = document.getElementById("error-state");
+
+        const eventTitle = document.getElementById("event-title");
+        const userList = document.getElementById("user-list");
+        const safeCount = document.getElementById("safe-count");
+        const unsafeCount = document.getElementById("unsafe-count");
+        const totalCount = document.getElementById("total-count");
+        const updateTime = document.getElementById("update-time");
+
+        function showState(state) {
+            loading.style.display = "none";
+            emptyState.style.display = state === "empty" ? "flex" : "none";
+            reportContent.style.display = state === "report" ? "block" : "none";
+            errorState.style.display = state === "error" ? "flex" : "none";
+        }
+
+        function createUserCard(fid, data) {
+            const isSafe = data.state === "safe";
+            const stateClass = isSafe ? "safe" : "unsafe";
+            const stateText = isSafe ? "安全" : "不安全";
+            const icon = isSafe ? "✓" : "!";
+
+            const card = document.createElement("article");
+            card.className = "user-card";
+
+            const main = document.createElement("div");
+            main.className = "user-main";
+
+            const statusIcon = document.createElement("div");
+            statusIcon.className = `status-icon ${stateClass}`;
+            statusIcon.textContent = icon;
+
+            const userInfo = document.createElement("div");
+            userInfo.className = "user-info";
+
+            const userTop = document.createElement("div");
+            userTop.className = "user-top";
+
+            const id = document.createElement("div");
+            id.className = "user-id";
+            id.textContent = fid;
+
+            const badge = document.createElement("span");
+            badge.className = `status-badge ${stateClass}`;
+            badge.textContent = stateText;
+
+            userTop.append(id, badge);
+
+            const location = document.createElement("div");
+            location.className = "location";
+            location.textContent = `📍 ${data.location || "未提供位置"}`;
+
+            userInfo.append(userTop, location);
+
+            if (data.msg) {
+                const message = document.createElement("div");
+                message.className = "message";
+                message.textContent = data.msg;
+                userInfo.appendChild(message);
+            }
+
+            main.append(statusIcon, userInfo);
+            card.appendChild(main);
+
+            return card;
+        }
+
+        async function loadSafetyReport() {
+            try {
+                showState("loading");
+
+                const response = await fetch(API_URL, {
+                    method: "GET",
+                    cache: "no-store"
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                if (!data.hasSN) {
+                    showState("empty");
+                    return;
+                }
+
+                eventTitle.textContent = data.title || "安全通報";
+
+                const globalData =
+                    data.global && typeof data.global === "object"
+                        ? data.global
+                        : {};
+
+                const users = Object.entries(globalData);
+
+                let safe = 0;
+                let unsafe = 0;
+
+                userList.innerHTML = "";
+
+                users.forEach(([fid, userData]) => {
+                    if (userData.state === "safe") {
+                        safe++;
+                    } else if (userData.state === "unsafe") {
+                        unsafe++;
+                    }
+
+                    userList.appendChild(
+                        createUserCard(fid, userData)
+                    );
+                });
+
+                safeCount.textContent = safe;
+                unsafeCount.textContent = unsafe;
+                totalCount.textContent = `共 ${users.length} 人`;
+
+                updateTime.textContent =
+                    `最後更新：${new Date().toLocaleTimeString(
+                        "zh-TW",
+                        {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            second: "2-digit"
+                        }
+                    )}`;
+
+                showState("report");
+
+            } catch (error) { showState("error"); }
+        }
+
+        document.getElementById("retry-button").addEventListener("click", loadSafetyReport);
+
+        loadSafetyReport();
+    </script>
+</body>
+</html>
