@@ -201,14 +201,14 @@ body {
 }
 
 #warning-legend {
-    padding: 5px;
+    padding: 10px;
     font-size: 14px;
     z-index: 1000;
     display: flex;
+    column-gap: 10px;
 }
 
 .legend-column {
-    flex: 1;
     text-align: center;
     display: flex;
     flex-direction: column;
