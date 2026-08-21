@@ -320,6 +320,8 @@ window.addEventListener('keydown', (e) => {
 
 const audio = new Audio('./audio/test.ogg');
 audio.play().then(() => {}).catch((e) => {
+    const isStandalone = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
+    if (!isStandalone) {
     alert(`請根據以下步驟，允許網站播放音效：
 Chrome：
 點擊網址列左側的圖示。
@@ -328,6 +330,7 @@ Chrome：
 Firefox：
 點擊網址列左側的圖示。
 找到「權限」，允許相關功能。`);
+    }
 });
 
 let shouldPlayAlert = true;
