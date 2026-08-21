@@ -157,7 +157,6 @@ body {
 
 #warning-location .wrapper {
     position: relative;
-    z-index: 1;
 }
 
 #warning-location .wrapper .header {
