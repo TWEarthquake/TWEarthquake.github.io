@@ -37,6 +37,18 @@
         align-items: center;
     }
 
+    .report-information-pwa {
+        width: 65%;
+        position: relative;
+        display: block;
+        border: 2px black solid;
+        padding: 40px;
+        border-radius: 10px;
+        margin-bottom: 50px;
+        flex-direction: row;
+        align-items: center;
+    }
+
     .report-img {
         margin-right: 40px;
         display: flex;
@@ -171,7 +183,7 @@
                 const container = document.getElementsByClassName("report");
                 data.data.forEach(item => {
                     const reportDiv = document.createElement("div");
-                    reportDiv.className = "report-information";
+                    reportDiv.className = isStandalone ? "report-information-pwa" : "report-information";
 
                     reportDiv.innerHTML = `
                     <div class="report-img">
@@ -204,12 +216,6 @@
                 });
             })
         .catch(e => { alert('無法取得資料, 請稍後再試'); });
-        
-        if (isStandalone) {
-            document.querySelectorAll('.report-information').forEach(e => {
-                e.style.display = 'block'
-            })
-        }
     });
 </script>
 
