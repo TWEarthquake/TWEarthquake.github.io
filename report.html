@@ -175,12 +175,12 @@
 
                     reportDiv.innerHTML = `
                     <div class="report-img">
-                        <img src="${item.im}" width="400px" onerror="handleImageError(this)">
+                        <img src="${item.im}" width="${isStandalone ? "100%" : "400px"}" onerror="handleImageError(this)">
                         <div>
                         <a href="${item.im}" target="_blank">點我看大圖</a>
                         </div>
                     </div>
-                    <div style="margin-right: 50px; border-left: 2px black solid; padding-left: 40px;">
+                    <div style="margin-right: 50px; ${isStandalone ? "border-top: 2px black solid;" : "border-left: 2px black solid;"} padding-left: 40px;">
                         <div class="report-title">${item.na}</div>
                         <div class="report-content">時間：${item.ti}</div>
                         <div class="report-content">位置：${item.la}°N, ${item.lo}°E</div>
@@ -206,12 +206,8 @@
         .catch(e => { alert('無法取得資料, 請稍後再試'); });
         
         if (isStandalone) {
-            document.getElementsByClassName('report-information').forEach(e => {
+            document.querySelectorAll('.report-information').forEach(e => {
                 e.style.display = 'block'
-            })
-            document.getElementsByClassName('report-information').forEach(e => {
-                e.style.borderLeft = ''
-                e.style.borderTop = '2px black solid'
             })
         }
     });
