@@ -196,7 +196,7 @@ body {
     border: 1px solid rgba(0, 0, 0, 0.3);
     border-radius: 10px;
     color: black;
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0);
     backdrop-filter: blur(8px);
     display: none;
 }
