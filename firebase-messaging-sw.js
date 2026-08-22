@@ -68,7 +68,7 @@ async function handleBackgroundMessage(data) {
             const location = settings.location;
             const alertLevel = settings.alertLevel;
 
-			const response = await fetch(`https://twearthquake.zapto.org:30007/api/web/location/${location}`)
+			const response = await fetch(`https://twearthquake.zapto.org:30007/api/web/location/${location}`);
 			if (response.ok) {
                 const result = await response.json();
 				body = '成功請求';
@@ -77,7 +77,7 @@ async function handleBackgroundMessage(data) {
 				body = `〚${numToLevel[result.level]}〛地震，〚${result.second}秒〛後抵達`
 			}
 		}
-		catch (e) { body = `發生錯誤: {$e}`; }
+		catch (e) { body = `發生錯誤: ${e}`; }
 	}
 	await self.registration.showNotification(title, {
         body: body,
