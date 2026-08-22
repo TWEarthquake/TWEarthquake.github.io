@@ -80,7 +80,7 @@ async function handleBackgroundMessage(data) {
 	}
 	await self.registration.showNotification(title, {
         body: body,
-        icon: "/Web/f256x256.png",
+        icon: "/f256x256.png",
         data: {
             url: "/pwa"
         }
