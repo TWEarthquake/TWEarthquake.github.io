@@ -117,8 +117,8 @@ globalThis.SettingsDB = (() => {
 
         location = location.trim();
 
-        if (location && !/^[A-Za-z]+$/.test(location)) {
-            throw new TypeError("location 只能包含英文字母");
+        if (location && !/^[A-Za-z0-9]+$/.test(location)) {
+            throw new TypeError("location 只能包含英文字母或數字");
         }
 
         return updateSettings({ location });
