@@ -73,7 +73,7 @@ async function handleBackgroundMessage(data) {
                 const result = await response.json();
 				if (Number.isFinite(result.level) && alertLevel > result.level) { return; }
 
-				body = `〚${numToLevel[result.level]}〛地震，〚${result.second}秒〛後抵達`
+				body = `〚${numToLevel[result.level]}〛地震，〚${result.second}秒〛後抵達\n慎防強烈搖晃，就近避難「趴下、掩護、穩住」。Beware of strong shaking, seek cover nearby "DROP, COVER, HOLD ON"`
 			}
 		}
 		catch (e) { }
