@@ -15,7 +15,7 @@ const messaging = firebase.messaging();
 
 messaging.onMessage(function(payload) {
   const msgTitle = payload.data.title;
-  const url = payload.data.click_action || "/";
+  const url = payload.data.click_action || "/pwa";
 
   const notification = new Notification(msgTitle, {
     body: payload.data.body,
@@ -50,11 +50,8 @@ messaging.onBackgroundMessage(function(payload) {
   self.registration.showNotification(payload.data.title, {
     body: payload.data.body,
     icon: "./f256x256.png",
-    //vibrate: [2000, 500, 1000, 500, 1000],
-    //requireInteraction: true,
-    //renotify: true,
     data: {
-      url: "/"
+      url: "/pwa"
     }
   });
 
