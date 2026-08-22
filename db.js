@@ -6,7 +6,9 @@ globalThis.SettingsDB = (() => {
 
     const DEFAULT_SETTINGS = Object.freeze({
         location: "Taipei",
-        alertLevel: 0
+        alertLevel: 0,
+        fcmToken: "",
+        fid: ""
     });
 
     let dbPromise = null;
@@ -53,7 +55,15 @@ globalThis.SettingsDB = (() => {
             ? Number(data.alertLevel)
             : DEFAULT_SETTINGS.alertLevel;
 
-        return { location, alertLevel: alertLevel };
+        const fcmToken = typeof data.fcmToken === "string"
+            ? data.fcmToken.trim()
+            : DEFAULT_SETTINGS.fcmToken;
+
+        const fid = typeof data.fid === "string"
+            ? data.fid.trim()
+            : DEFAULT_SETTINGS.fid;
+
+        return { location, alertLevel, fcmToken, fid };
     }
 
     async function readRawSettings() {
@@ -94,7 +104,9 @@ globalThis.SettingsDB = (() => {
 
         if (
             raw.location !== normalized.location ||
-            raw.alertLevel !== normalized.alertLevel
+            raw.alertLevel !== normalized.alertLevel ||
+            raw.fcmToken !== normalized.fcmToken ||
+            raw.fid !== normalized.fid
         ) {
             await writeSettings(normalized);
         }
@@ -132,6 +144,26 @@ globalThis.SettingsDB = (() => {
         return updateSettings({ alertLevel: alertLevel });
     }
 
+    async function setFCMToken(fcmToken) {
+        if (typeof fcmToken !== "string") {
+            throw new TypeError("fcmToken 必須為字串");
+        }
+
+        return updateSettings({
+            fcmToken: fcmToken.trim()
+        });
+    }
+
+    async function setFID(fid) {
+        if (typeof fid !== "string") {
+            throw new TypeError("fid 必須為字串");
+        }
+
+        return updateSettings({
+            fid: fid.trim()
+        });
+    }
+
     async function resetSettings() {
         return writeSettings(DEFAULT_SETTINGS);
     }
@@ -153,6 +185,8 @@ globalThis.SettingsDB = (() => {
         updateSettings,
         setLocation,
         setAlertLevel,
+        setFCMToken,
+        setFID,
         resetSettings,
         clearSettings,
         DEFAULT_SETTINGS
