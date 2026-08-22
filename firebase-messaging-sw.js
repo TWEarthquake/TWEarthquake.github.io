@@ -71,12 +71,13 @@ async function handleBackgroundMessage(data) {
 			const response = await fetch(`https://twearthquake.zapto.org:30007/api/web/location/${location}`)
 			if (response.ok) {
                 const result = await response.json();
+				body = '成功請求';
 				if (Number.isFinite(level) && alertLevel > result.level) { return; }
 
 				body = `〚${numToLevel[result.level]}〛地震，〚${result.second}秒〛後抵達`
 			}
 		}
-		catch (error) { }
+		catch (error) { body = '發生錯誤'; }
 	}
 	await self.registration.showNotification(title, {
         body: body,
