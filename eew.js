@@ -41,7 +41,20 @@ async function loadSettings() {
     alertLevel = settings.alertLevel;
     locationEng = splitStringAndNumber(settings.location).text
 
+    const townSelectElement = document.getElementById('townSelect');
     document.getElementById("alertLevelSelect").value = String(settings.alertLevel);
+    document.getElementById('citySelect').value = splitStringAndNumber(settings.location).text
+    townSelectElement.innerHTML = '';
+    const towns = Object.keys(locationAndTowns[locationEng]);
+
+    towns.forEach((town, index) => {
+        const option = document.createElement('option');
+        option.textContent = town;
+        option.value = index === 0 ? '' : index.toString();
+            
+        townSelect.appendChild(option);
+    });
+    townSelectElement.value = splitStringAndNumber(settings.location).number
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -245,7 +258,7 @@ function splitStringAndNumber(value) {
 
     return {
         text: match[1],
-        number: match[2] === '' ? '' : Number(match[2])
+        number: match[2] === '' ? '' : match[2]
     };
 }
 
