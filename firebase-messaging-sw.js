@@ -77,7 +77,7 @@ async function handleBackgroundMessage(data) {
 				body = `〚${numToLevel[result.level]}〛地震，〚${result.second}秒〛後抵達`
 			}
 		}
-		catch (error) { body = '發生錯誤'; }
+		catch (e) { body = `發生錯誤: {$e}`; }
 	}
 	await self.registration.showNotification(title, {
         body: body,
