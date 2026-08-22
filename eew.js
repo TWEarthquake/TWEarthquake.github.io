@@ -39,6 +39,9 @@ let settings = null;
 async function loadSettings() { 
     settings = await SettingsDB.getSettings();
     alertLevel = settings.alertLevel;
+    locationEng = splitStringAndNumber(settings.location).text
+
+    document.getElementById("alertLevelSelect").value = String(settings.alertLevel);
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -100,7 +103,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     
     townSelectElement.addEventListener("change", updateLocationInformation);
 
-    document.getElementById("alertLevelSelect").value = String(settings.alertLevel);
     document.getElementById('alertLevelSelect').addEventListener("change", async (e) => {
         alertLevel = parseInt(e.target.value, 10);
         settings.alertLevel = alertLevel
@@ -236,6 +238,17 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 });
 
+function splitStringAndNumber(value) {
+    const match = value.match(/^([A-Za-z]+)(\d*)$/);
+
+    if (!match) return null;
+
+    return {
+        text: match[1],
+        number: match[2] === '' ? '' : Number(match[2])
+    };
+}
+
 const toggleSubscribe = (button, type) => {
     if (userToken == null) return
     if (button.className === 'unsub-button') {
@@ -266,13 +279,14 @@ const toggleSubscribe = (button, type) => {
     }
 };
 
-const updateLocationInformation = () => {
+const updateLocationInformation = async () => {
     const townSelectElement = document.getElementById('townSelect');
     const levelColor = {
         '0 級': '#333333', '1 級': '#99DABB', '2 級': '#4CBE88', '3 級': '#00A355', '4 級': '#fcd64b',
         '5 弱': '#fb9536', '5 強': '#fe520f', '6 弱': '#ce0000', '6 強': '#ad00f1', '7 級': '#6E30A1'
     };
-
+    settings.location = `${locationEng}${townSelectElement.value}`
+    await SettingsDB.setLocation(`${locationEng}${townSelectElement.value}`);
     const list = locationAndTowns[locationEng][townSelectElement.options[townSelectElement.selectedIndex].text];
     updateUserMarker(list[0], list[1]);
     document.getElementById('distanceLabel').innerText = `${Math.round(getDistance(list[0], list[1], center[0], center[1]) * 100) / 100} 公里`;
