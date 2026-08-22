@@ -44,7 +44,7 @@ globalThis.SettingsDB = (() => {
             ? data.location.trim()
             : DEFAULT_SETTINGS.location;
 
-        if (location && !/^[A-Za-z]+$/.test(location)) {
+        if (location && !/^[A-Za-z0-9]+$/.test(location)) {
             location = DEFAULT_SETTINGS.location;
         }
 
