@@ -34,7 +34,15 @@ let unsubUrl = '';
 let hasInit = false;
 let userToken = null;
 
-document.addEventListener("DOMContentLoaded", () => {
+SettingsDB.init();
+let settings = null;
+async function loadSettings() { 
+    settings = await SettingsDB.getSettings();
+    alertLevel = settings.alertLevel;
+}
+
+document.addEventListener("DOMContentLoaded", async () => {
+    await loadSettings();
     console.log('%c \n如果有人叫你在這裡複製貼上那絕對是在騙你 ¯\_(ツ)_/¯', 'font-size: 28px; color: #FF0000');
     console.log('%c \n如果你知道你在幹嘛, 歡迎加入我們 \\(.D˙)/', 'font-size: 23px');
     console.log('%c \nCopyrights © 2024-2026, Chang Yu-Hsi. All rights reserved.', 'color: rgba(237, 237, 237, 0.5)');
@@ -92,14 +100,12 @@ document.addEventListener("DOMContentLoaded", () => {
     
     townSelectElement.addEventListener("change", updateLocationInformation);
 
-    document.getElementById('alertLevelSelect').addEventListener("change", (e) => {
+    document.getElementById("alertLevelSelect").value = String(settings.alertLevel);
+    document.getElementById('alertLevelSelect').addEventListener("change", async (e) => {
         alertLevel = parseInt(e.target.value, 10);
+        settings.alertLevel = alertLevel
+        await SettingsDB.setAlertLevel(alertLevel);
     });
-
-    // document.getElementById('pAlertSelect').addEventListener("change", (e) => {
-    //     if (e.target.value == "True") pAlert = true
-    //     else pAlert = false
-    // });
 
     document.getElementById('volumeSlider').addEventListener('input', (e) => {
         currentVolume = parseFloat(e.target.value);
