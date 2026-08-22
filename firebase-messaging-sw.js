@@ -1,3 +1,4 @@
+importScripts("/db.js");
 importScripts("https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js");
 importScripts("https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging-compat.js");
 
@@ -31,7 +32,7 @@ messaging.onMessage(function(payload) {
 self.addEventListener("notificationclick", function(event) {
   event.notification.close();
 
-  const url = event.notification.data.url || "/";
+  const url = event.notification.data.url || "/pwa";
 
   event.waitUntil(
     clients.matchAll({ type: "window", includeUncontrolled: true })
@@ -47,15 +48,41 @@ self.addEventListener("notificationclick", function(event) {
 });
 
 messaging.onBackgroundMessage(function(payload) {
-  self.registration.showNotification(payload.data.title, {
-    body: payload.data.body,
-    icon: "./f256x256.png",
-    data: {
-      url: "/pwa"
-    }
-  });
+	const data = payload.data || {};
 
+    return handleBackgroundMessage(data);
 });
 
+async function handleBackgroundMessage(data) {
+    let title = data.title || "";
+    let body = data.body || "";
+	const numToLevel = {
+		0: "0 級", 1: "1 級", 2: "2 級", 3: "3 級", 4: "4 級",
+		5: "5 弱", 6: "5 強", 7: "6 弱", 8: "6 強", 9: "7 級"
+	};
 
+	if (data.type === "eew") {
+		try {
+			const settings = await SettingsDB.getSettings();
 
+            const location = settings.location;
+            const alertLevel = settings.alertLevel;
+
+			const response = await fetch(`https://twearthquake.zapto.org:30007/api/web/location/${location}`)
+			if (response.ok) {
+                const result = await response.json();
+				if (Number.isFinite(level) && alertLevel > result.level) { return; }
+
+				body = `〚${numToLevel[result.level]}〛地震，〚${result.second}秒〛後抵達`
+			}
+		}
+		catch (error) { }
+	}
+	await self.registration.showNotification(title, {
+        body: body,
+        icon: "/Web/f256x256.png",
+        data: {
+            url: "/pwa"
+        }
+    });
+}
