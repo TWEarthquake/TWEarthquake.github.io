@@ -50,7 +50,7 @@
             <div id="sideMenu">
                 <span class="closeBtn" onclick="closeMenu()">&times;</span>
                 <a href="/report" target="_blank">地震報告</a>
-				<a href="/SafetyNotice" target="_blank">安全通報</a>
+				<a href="/SafetyNotice" target="_blank" onclick="return checkUserToken()">安全通報</a>
                 <a href="/statistics" target="_blank">統計資料</a>
                 <a href="https://twearthquake.github.io/changelog" target="_blank">更新日誌</a>
             </div>
@@ -328,6 +328,13 @@
         document.getElementById("sideMenu").style.width = "0";
         document.getElementById("sideMenu").style.border = "none";
     }
+	function checkUserToken()  {
+        if (userToken == null) {
+            alert("開啟通知後才可使用安全通報功能");
+            return false;
+		}
+        return true;
+	}
 </script>
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
