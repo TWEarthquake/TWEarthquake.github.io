@@ -864,6 +864,12 @@
         }
 
         async function submitReport() {
+            const settings = await SettingsDB.getSettings();
+            const fid = settings?.fid ?? "";
+            if (fid === "") {
+                alert("需要設定ID才可回報");
+                return;
+            }
             if (selectedSNState !== "safe" && selectedSNState !== "unsafe") {
                 alert("請選擇「安全」或「有影響」");
                 return;
