@@ -500,7 +500,7 @@ a:hover {
 
 @media (max-width: 640px) {
     #map {
-        height: clamp(250px, 45dvh, 430px);
+        height: clamp(260px, 45dvh, 480px);
         min-height: 250px;
         border-radius: 0 0 16px 16px;
     }
@@ -608,7 +608,7 @@ a:hover {
 
 @media (min-width: 900px) {
     #map {
-        height: clamp(420px, 58dvh, 760px);
+        height: clamp(430px, 60dvh, 760px);
     }
 
     #warning-information .top > .epicenter-table:nth-of-type(1),
