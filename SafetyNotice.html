@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <title>安全通報</title>
     <link rel="icon" href="/f256x256.png" />
+    <script src='./db.js'></script>
     <style>
         :root {
             --safe: #16a34a;
@@ -40,6 +41,15 @@
 
         body {
             min-height: 100dvh;
+        }
+
+        a {
+            display: inline-block;
+            padding: 4px 10px;
+            font-size: 12px;
+            border-radius: 4px;
+            text-decoration: none;
+            text-align: center;
         }
 
         .app {
@@ -112,7 +122,7 @@
 
         #empty-state {
             display: none;
-            min-height: calc(100dvh - 130px);
+            min-height: 50dvh;
             justify-content: center;
             align-items: center;
             flex-direction: column;
@@ -157,7 +167,7 @@
                 );
             border: 1px solid var(--border);
             border-radius: 22px;
-            padding: 20px;
+            padding: 10px;
             box-shadow: 0 8px 30px rgba(30, 41, 59, 0.07);
             margin-bottom: 16px;
         }
@@ -183,10 +193,14 @@
 
         #event-title {
             margin: 0;
-            font-size: clamp(21px, 6vw, 28px);
+            font-size: clamp(21px, 6vw, 26px);
             line-height: 1.35;
             letter-spacing: -0.4px;
             word-break: break-word;
+        }
+
+        #event-sub-title {
+            color: gray;
         }
 
         .summary {
@@ -194,6 +208,8 @@
             grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 10px;
             margin-bottom: 20px;
+            border-top: 2px solid gray;
+            padding-top: 10px;
         }
 
         .summary-card {
@@ -235,12 +251,12 @@
             font-size: 17px;
         }
 
-        #total-count {
+        #total-count-global, #total-count-friend {
             color: var(--secondary);
             font-size: 13px;
         }
 
-        #user-list {
+        #user-list-global, #user-list-friend {
             display: flex;
             flex-direction: column;
             gap: 10px;
@@ -388,6 +404,85 @@
             font-size: 12px;
         }
 
+        .notice-settings {
+            margin-bottom: 12px;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .text-input {
+            min-width: 0;
+            flex: 1;
+            height: 44px;
+            padding: 0 13px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: white;
+            color: var(--text);
+            font: inherit;
+            outline: none;
+        }
+
+        .text-input:focus {
+            border-color: #94a3b8;
+        }
+
+        .text-input:disabled {
+            background: #f1f5f9;
+            color: var(--secondary);
+        }
+
+        .input-button, .tab-button {
+            border: 0;
+            border-radius: 12px;
+            padding: 0 16px;
+            background: #2563eb;
+            color: white;
+            font: inherit;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .input-button {
+            height: 44px;
+        }
+
+        .tab-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .tab-button {
+            background: white;
+            color: var(--text);
+            border: 1px solid var(--border);
+            padding: 10px;
+        }
+
+        .id-hint {
+            min-height: 18px;
+            margin: 0 2px 8px;
+            color: var(--unsafe);
+            font-size: 13px;
+        }
+
+        #fcm-disabled {
+            min-height: 70dvh;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: var(--secondary);
+            font-size: 16px;
+            font-weight: 600;
+            padding: 30px;
+        }
+
         @media (min-width: 640px) {
             .app {
                 padding-left: 24px;
@@ -397,6 +492,86 @@
             .summary {
                 grid-template-columns: repeat(2, 1fr);
             }
+        }
+
+        .report-state {
+            display: flex;
+            gap: 12px;
+            width: 100%;
+            margin-top: 16px;
+        }
+
+        .state-option {
+            flex: 1;
+            flex-direction: column;
+            aspect-ratio: 1 / 0.7;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: 0.2s;
+            box-sizing: border-box;
+            background: var(--background-color, #fff);
+        }
+
+        .state-option span {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .state-option.selected[data-state="safe"] {
+            border-color: #34c759;
+        }
+
+        .state-option.selected[data-state="unsafe"] {
+            border-color: #ff3b30;
+        }
+
+        .report-message {
+            position: relative;
+            margin-top: 12px;
+        }
+
+        #report-message {
+            width: 100%;
+            height: 100px;
+            padding: 12px;
+            padding-bottom: 28px;
+            box-sizing: border-box;
+            resize: none;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            font-size: 16px;
+            font-family: inherit;
+            outline: none;
+        }
+
+        #report-message:focus {
+            border-color: #888;
+        }
+
+        .message-count {
+            position: absolute;
+            right: 10px;
+            bottom: 8px;
+            font-size: 12px;
+            color: #888;
+        }
+
+        .report-button {
+            width: 100%;
+            height: 48px;
+            margin-top: 12px;
+            border: none;
+            border-radius: 12px;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 10px;
+            cursor: not-allowed;
+            background-color: gray;
         }
     </style>
 </head>
@@ -412,43 +587,97 @@
             </div>
         </header>
 
-        <div id="loading">
-            <div class="spinner"></div>
-            <span>正在取得通報資訊...</span>
+        <div id="fcm-disabled">開啟通知後才可使用安全通報功能</div>
+
+        <div id="notice-content">
+            <section class="notice-settings">
+                <div class="input-row">
+                    <input id="my-id" class="text-input" type="text" placeholder="我的ID" maxlength="64" autocomplete="off">
+                    <button id="set-id-button" class="input-button" style="background-color: gray; cursor: not-allowed;" disabled>儲存</button>
+                </div>
+                <div id="id-hint" class="id-hint">需大於6個字元</div>
+                <div id="tip-hint" class="id-hint">需要設定ID才可啟用好友功能，同時對方也需設定才可添加為好友。一但新增後就無法更改，請勿設定為常用或其他網站的單詞或密碼。</div>
+
+                <div id="add-friend-row" class="input-row">
+                    <input id="friend-id" class="text-input" type="text" placeholder="加入好友" maxlength="64" autocomplete="off">
+                    <button id="add-friend-button" class="input-button">加入</button>
+                </div>
+
+                <div class="tab-buttons">
+                    <a href="/fl" id="friend-list-button" class="tab-button">好友列表</a>
+                    <a href="/fr" id="friend-request-button" class="tab-button">好友請求</a>
+                </div>
+            </section>
+
+            <div id="loading">
+                <div class="spinner"></div>
+                <span>正在取得通報資訊...</span>
+            </div>
+
+            <section id="empty-state">
+                <div class="empty-icon">✓</div>
+                <h2>目前無可通報項目</h2>
+            </section>
+
+            <section id="report-content">
+                <div class="event-card">
+                    <div class="event-label">目前通報項目</div>
+                    <h2 id="event-title"></h2>
+                    <h3 id="event-sub-title"></h3>
+                </div>
+                <div class="report-state">
+                    <div id="state-option-safe" class="state-option" data-state="safe" onclick="selectReportState(this)">
+                        <span style="font-size: 30px;">🙂</span>
+                        <span>安全</span>
+                    </div>
+
+                    <div id="state-option-unsafe" class="state-option" data-state="unsafe" onclick="selectReportState(this)">
+                        <span style="color: red; font-size: 30px;">⚠</span>
+                        <span>有影響</span>
+                    </div>
+                </div>
+
+                <div class="report-message">
+                    <textarea
+                        id="report-message"
+                        maxlength="64"
+                        placeholder="留言（選填）"
+                    ></textarea>
+
+                    <div class="message-count">
+                        <span id="message-count">0</span>/64
+                    </div>
+                </div>
+
+                <button id="report-button" class="report-button input-button" disabled>
+                    回報
+                </button>
+
+                <div class="summary">
+                    <div class="summary-card safe">
+                        <div class="label">已確認安全</div>
+                        <div class="number" id="safe-count">0</div>
+                    </div>
+                    <div class="summary-card unsafe">
+                        <div class="label">回報不安全</div>
+                        <div class="number" id="unsafe-count">0</div>
+                    </div>
+                </div>
+
+                <div class="section-title">
+                    <h2>好友回報狀態</h2>
+                    <span id="total-count-friend">共 0 人</span>
+                </div>
+                <div id="user-list-friend"></div>
+
+                <div class="section-title" style="margin-top: 10px;">
+                    <h2>公開回報狀態</h2>
+                    <span id="total-count-global">共 0 人</span>
+                </div>
+                <div id="user-list-global"></div>
+                <div id="update-time"></div>
+            </section>
         </div>
-
-        <section id="empty-state">
-            <div class="empty-icon">✓</div>
-            <h2>目前無可通報項目</h2>
-        </section>
-
-        <section id="report-content">
-            <div class="event-card">
-                <div class="event-label">目前通報項目</div>
-                <h2 id="event-title"></h2>
-            </div>
-
-            <div class="summary">
-                <div class="summary-card safe">
-                    <div class="label">已確認安全</div>
-                    <div class="number" id="safe-count">0</div>
-                </div>
-
-                <div class="summary-card unsafe">
-                    <div class="label">回報不安全</div>
-                    <div class="number" id="unsafe-count">0</div>
-                </div>
-            </div>
-
-            <div class="section-title">
-                <h2>通報狀態</h2>
-                <span id="total-count">共 0 人</span>
-            </div>
-
-            <div id="user-list"></div>
-
-            <div id="update-time"></div>
-        </section>
 
         <section id="error-state">
             <div class="error-icon">⚠️</div>
@@ -456,7 +685,6 @@
             <p>請確認網路連線後再試一次</p>
             <button id="retry-button">重新載入</button>
         </section>
-
     </main>
 
     <script>
@@ -488,25 +716,174 @@
             console.log('%c \nCopyrights © 2024-2026, Chang Yu-Hsi. All rights reserved.', 'color: rgba(237, 237, 237, 0.5)');
         });
 
-        const API_URL = "https://twearthquake.zapto.org:30007/api/gsn";
+        const API_URL = "https://twearthquake.zapto.org:30007/api/web/sn";
+        const retryErrorMsg = "發生未知錯誤，請稍後再試";
 
         const loading = document.getElementById("loading");
         const emptyState = document.getElementById("empty-state");
         const reportContent = document.getElementById("report-content");
         const errorState = document.getElementById("error-state");
+        const fcmDisabled = document.getElementById("fcm-disabled");
+        const noticeContent = document.getElementById("notice-content");
+
+        const myIdInput = document.getElementById("my-id");
+        const friendIdInput = document.getElementById("friend-id");
+        const addFriendRow = document.getElementById("add-friend-row");
+        const setIdButton = document.getElementById("set-id-button");
+        const idHint = document.getElementById("id-hint");
+        const tipHint = document.getElementById("tip-hint");
 
         const eventTitle = document.getElementById("event-title");
-        const userList = document.getElementById("user-list");
+        const eventSubTitle = document.getElementById("event-sub-title");
+        const userListGlobal = document.getElementById("user-list-global");
+        const userListFriend = document.getElementById("user-list-friend");
         const safeCount = document.getElementById("safe-count");
         const unsafeCount = document.getElementById("unsafe-count");
-        const totalCount = document.getElementById("total-count");
+        const totalCountGlobal = document.getElementById("total-count-global");
+        const totalCountFriend = document.getElementById("total-count-friend");
         const updateTime = document.getElementById("update-time");
+        const reportMessage = document.getElementById("report-message");
+        const messageCount = document.getElementById("message-count");
+        const reportButton = document.getElementById("report-button");
+
+        let token = null;
+        let selectedSNState = null;
+
+        function selectReportState(element) {
+            document.querySelectorAll(".state-option").forEach(option => {
+                option.classList.remove("selected");
+            });
+
+            element.classList.add("selected");
+            selectedSNState = element.dataset.state;
+            openReportButton()
+        }
+
+        function openReportButton() {
+            if (!selectedSNState || selectedSNState === "") { return; }
+            reportButton.style.backgroundColor = '#2563eb';
+            reportButton.style.cursor = 'pointer';
+            reportButton.disabled = false;
+        }
 
         function showState(state) {
-            loading.style.display = "none";
+            loading.style.display = state === "loading" ? "flex" : "none";
             emptyState.style.display = state === "empty" ? "flex" : "none";
             reportContent.style.display = state === "report" ? "block" : "none";
             errorState.style.display = state === "error" ? "flex" : "none";
+        }
+
+        function sanitizeInput(input) {
+            input.value = input.value.replace(/[^a-zA-Z0-9]/g, "");
+            validateMyId();
+        }
+
+        function validateMyId() {
+            const value = myIdInput.value;
+            const isNotAllow = value.length < 6;
+
+            idHint.textContent = isNotAllow ? "需大於6個字元" : "";
+            setIdButton.disabled = isNotAllow ? true : false;
+            setIdButton.style.background = isNotAllow ? 'gray' : '#2563eb';
+            setIdButton.style.cursor = isNotAllow ? 'not-allowed' : 'pointer';
+        }
+
+        async function setID() {
+            const value = myIdInput.value;
+            if (value.length < 6) {
+                alert("ID需大於6個字元");
+                return;
+            }
+            
+            const response = await fetch("https://twearthquake.zapto.org:30007/set/web/fid", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    token: token,
+                    fid: value
+                })
+            });
+            if (!response.ok) {
+                alert(retryErrorMsg);
+                return
+            }
+            const data = await response.json();
+            if (!data.Success) {
+                alert("該ID已存在，請重新輸入");
+                return;
+            }
+            alert("儲存成功")
+            myIdInput.disabled = true;
+            addFriendRow.style.display = "flex";
+            setIdButton.style.display = "none";
+            idHint.remove();
+            tipHint.remove();
+            SettingsDB.setFID(value)
+        }
+
+        async function addFriend() {
+            const settings = await SettingsDB.getSettings();
+            const fid = settings?.fid ?? "";
+            const value = friendIdInput.value;
+            if (fid === "") {
+                alert("需要設定ID才可添加好友");
+                return;
+            }
+            if (fid.length < 6 || value.length < 6) {
+                alert("ID需大於6個字元");
+                return;
+            }
+            if (fid == value) {
+                alert("不可添加自己為好友");
+                return;
+            }
+
+            const response = await fetch("https://twearthquake.zapto.org:30007/friend/web/add", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    token: token,
+                    fid: value
+                })
+            });
+            if (!response.ok) {
+                alert(retryErrorMsg);
+                return
+            }
+            const data = await response.json();
+            if (!data.Success) {
+                alert(data.Reason);
+                return;
+            }
+            alert("已成功送出好友請求");
+            friendIdInput.value = "";
+        }
+
+        async function submitReport() {
+            if (selectedSNState !== "safe" && selectedSNState !== "unsafe") {
+                alert("請選擇「安全」或「有影響」");
+                return;
+            }
+            const response = await fetch("https://twearthquake.zapto.org:30007/set/sn", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    TOKEN: token,
+                    SNState: selectedSNState,
+                    SNMsg: reportMessage.value
+                })
+            });
+            if (!response.ok) {
+                alert(retryErrorMsg);
+                return
+            }
+            alert("回報成功");
         }
 
         function createUserCard(fid, data) {
@@ -520,59 +897,47 @@
 
             const main = document.createElement("div");
             main.className = "user-main";
-
             const statusIcon = document.createElement("div");
             statusIcon.className = `status-icon ${stateClass}`;
             statusIcon.textContent = icon;
-
             const userInfo = document.createElement("div");
             userInfo.className = "user-info";
-
             const userTop = document.createElement("div");
             userTop.className = "user-top";
-
             const id = document.createElement("div");
             id.className = "user-id";
             id.textContent = fid;
-
             const badge = document.createElement("span");
             badge.className = `status-badge ${stateClass}`;
             badge.textContent = stateText;
-
             userTop.append(id, badge);
-
             const location = document.createElement("div");
             location.className = "location";
-            location.textContent = `📍 ${data.location || "未提供位置"}`;
-
+            location.textContent = data.location ? `📍 ${data.location || "未提供位置"}` : "";
             userInfo.append(userTop, location);
-
             if (data.msg) {
                 const message = document.createElement("div");
                 message.className = "message";
                 message.textContent = data.msg;
                 userInfo.appendChild(message);
             }
-
             main.append(statusIcon, userInfo);
             card.appendChild(main);
-
             return card;
         }
 
-        async function loadSafetyReport() {
+        async function loadSN() {
             try {
                 showState("loading");
-
                 const response = await fetch(API_URL, {
                     method: "GET",
-                    cache: "no-store"
+                    cache: "no-store",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "token": token
+                    }
                 });
-
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}`);
-                }
-
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
                 const data = await response.json();
 
                 if (!data.hasSN) {
@@ -581,53 +946,87 @@
                 }
 
                 eventTitle.textContent = data.title || "安全通報";
+                eventSubTitle.textContent = data.subTitle || "";
+                reportMessage.value = data.self.msg
+                selectedSNState = data.self.state
+                if (selectedSNState === "safe") document.getElementById("state-option-safe").classList.add("selected");
+                if (selectedSNState === "unsafe") document.getElementById("state-option-unsafe").classList.add("selected");
+                openReportButton()
 
-                const globalData =
-                    data.global && typeof data.global === "object"
-                        ? data.global
-                        : {};
-
-                const users = Object.entries(globalData);
-
+                const globalData = data.global && typeof data.global === "object" ? data.global : {};
+                const friendData = data.friend && typeof data.friend === "object" ? data.friend : {};
+                const globalUsers = Object.entries(globalData);
+                const friendUsers = Object.entries(friendData);
                 let safe = 0;
                 let unsafe = 0;
+                userListGlobal.innerHTML = "";
+                userListFriend.innerHTML = "";
 
-                userList.innerHTML = "";
-
-                users.forEach(([fid, userData]) => {
-                    if (userData.state === "safe") {
-                        safe++;
-                    } else if (userData.state === "unsafe") {
-                        unsafe++;
-                    }
-
-                    userList.appendChild(
-                        createUserCard(fid, userData)
-                    );
+                globalUsers.forEach(([fid, userData]) => {
+                    if (userData.state === "safe") safe++;
+                    else if (userData.state === "unsafe") unsafe++;
+                    userListGlobal.appendChild(createUserCard(fid, userData));
+                });
+                friendUsers.forEach(([fid, userData]) => {
+                    if (userData.state === "safe") safe++;
+                    else if (userData.state === "unsafe") unsafe++;
+                    userListFriend.appendChild(createUserCard(fid, userData));
                 });
 
                 safeCount.textContent = safe;
                 unsafeCount.textContent = unsafe;
-                totalCount.textContent = `共 ${users.length} 人`;
-
-                updateTime.textContent =
-                    `最後更新：${new Date().toLocaleTimeString(
-                        "zh-TW",
-                        {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                            second: "2-digit"
-                        }
-                    )}`;
-
+                totalCountFriend.textContent = `共 ${friendUsers.length} 人`;
+                totalCountGlobal.textContent = `共 ${globalUsers.length} 人`;
+                updateTime.textContent = `最後更新：${new Date().toLocaleTimeString("zh-TW", { hour: "2-digit", minute: "2-digit", second: "2-digit" })}`;
                 showState("report");
+            } catch (error) {
+                showState("error");
+            }
+        }
+ 
+        async function initialize() {
+            const settings = await SettingsDB.getSettings();
+            const fcmToken = settings?.fcmToken ?? "";
+            const fid = settings?.fid ?? ""; 
+            token = fcmToken;
 
-            } catch (error) { showState("error"); }
+            if (fcmToken === "") {
+                noticeContent.style.display = "none";
+                fcmDisabled.style.display = "flex";
+                return;
+            }
+
+            fcmDisabled.style.display = "none";
+            noticeContent.style.display = "block";
+
+            if (fid === "") {
+                myIdInput.value = "";
+                addFriendRow.style.display = "none";
+            } else {
+                myIdInput.value = fid;
+                myIdInput.disabled = true;
+                addFriendRow.style.display = "flex";
+                setIdButton.style.display = "none";
+                idHint.remove();
+                tipHint.remove();
+            }
+
+            await loadSN();
         }
 
-        document.getElementById("retry-button").addEventListener("click", loadSafetyReport);
+        myIdInput.addEventListener("input", () => sanitizeInput(myIdInput));
+        friendIdInput.addEventListener("input", () => sanitizeInput(friendIdInput));
+        document.getElementById("set-id-button").addEventListener("click", setID);
+        document.getElementById("add-friend-button").addEventListener("click", addFriend);
+        document.getElementById("friend-list-button").addEventListener("click", showFriendList);
+        document.getElementById("friend-request-button").addEventListener("click", showFriendRequests);
+        document.getElementById("report-button").addEventListener("click", submitReport);
+        document.getElementById("retry-button").addEventListener("click", loadSN);
+        reportMessage.addEventListener("input", () => {
+            messageCount.textContent = reportMessage.value.length;
+        });
 
-        loadSafetyReport();
+        initialize();
     </script>
 </body>
 </html>

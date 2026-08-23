@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>好友列表</title>
+    <link rel="icon" href="/f256x256.png" />
+    <script src='./db.js'></script>
+    <style>
+        :root {
+            --safe: #16a34a;
+            --safe-light: #ecfdf3;
+            --unsafe: #dc2626;
+            --unsafe-light: #fef2f2;
+            --noset: #7e7e7e;
+            --noset-light: #f2f9fe;
+            --text: #182230;
+            --secondary: #64748b;
+            --border: #e5eaf0;
+            --card: rgba(255, 255, 255, 0.92);
+            --background: #f4f7fb;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html,
+        body {
+            margin: 0;
+            min-height: 100%;
+            font-family:
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                "PingFang TC",
+                "Microsoft JhengHei",
+                sans-serif;
+            background: var(--background);
+            color: var(--text);
+        }
+
+        body {
+            min-height: 100dvh;
+        }
+
+        a {
+            display: inline-block;
+            padding: 4px 10px;
+            font-size: 12px;
+            border-radius: 4px;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .app {
+            width: 100%;
+            max-width: 760px;
+            min-height: 100dvh;
+            margin: 0 auto;
+            padding:
+                calc(18px + env(safe-area-inset-top))
+                16px
+                calc(24px + env(safe-area-inset-bottom));
+        }
+
+        .page-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 18px;
+        }
+
+        .header-icon {
+            width: 48px;
+            height: 48px;
+            flex: 0 0 48px;
+            border-radius: 16px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            background: linear-gradient(135deg, #e0ecff, #ffffff);
+            box-shadow: 0 5px 16px rgba(51, 87, 140, 0.1);
+        }
+
+        .page-header h1 {
+            margin: 0;
+            font-size: 25px;
+            letter-spacing: -0.5px;
+        }
+
+        .page-header p {
+            margin: 3px 0 0;
+            color: var(--secondary);
+            font-size: 13px;
+        }
+
+        #loading {
+            min-height: 60dvh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            color: var(--secondary);
+            gap: 14px;
+        }
+
+        .spinner {
+            width: 32px;
+            height: 32px;
+            border: 3px solid #dce5ef;
+            border-top-color: #64748b;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        #empty-state {
+            display: none;
+            min-height: 50dvh;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+            padding: 30px 15px;
+        }
+
+        .empty-icon {
+            width: 92px;
+            height: 92px;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 42px;
+            box-shadow: 0 10px 30px rgba(30, 41, 59, 0.08);
+            margin-bottom: 20px;
+        }
+
+        #empty-state h2 {
+            margin: 0;
+            font-size: 22px;
+        }
+
+        #empty-state p {
+            margin: 9px 0 0;
+            color: var(--secondary);
+            font-size: 14px;
+        }
+
+        #report-content {
+            display: none;
+        }
+
+        .event-card {
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(255, 255, 255, 0.98),
+                    rgba(245, 248, 252, 0.95)
+                );
+            border: 1px solid var(--border);
+            border-radius: 22px;
+            padding: 10px;
+            box-shadow: 0 8px 30px rgba(30, 41, 59, 0.07);
+            margin-bottom: 16px;
+        }
+
+        .event-label {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            color: #b45309;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 9px;
+        }
+
+        .event-label::before {
+            content: "";
+            width: 8px;
+            height: 8px;
+            background: #f59e0b;
+            border-radius: 50%;
+            box-shadow: 0 0 0 5px rgba(245, 158, 11, 0.12);
+        }
+
+        #event-title {
+            margin: 0;
+            font-size: clamp(21px, 6vw, 26px);
+            line-height: 1.35;
+            letter-spacing: -0.4px;
+            word-break: break-word;
+        }
+
+        #event-sub-title {
+            color: gray;
+        }
+
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+            margin-bottom: 20px;
+            border-top: 2px solid gray;
+            padding-top: 10px;
+        }
+
+        .summary-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 17px;
+            padding: 15px;
+        }
+
+        .summary-card .label {
+            color: var(--secondary);
+            font-size: 13px;
+            margin-bottom: 5px;
+        }
+
+        .summary-card .number {
+            font-size: 26px;
+            font-weight: 750;
+            letter-spacing: -0.5px;
+        }
+
+        .summary-card.safe .number {
+            color: var(--safe);
+        }
+
+        .summary-card.unsafe .number {
+            color: var(--unsafe);
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 0 2px 11px;
+        }
+
+        .section-title h2 {
+            margin: 0;
+            font-size: 17px;
+        }
+
+        #user-list-friend {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .user-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 15px;
+            box-shadow: 0 4px 16px rgba(30, 41, 59, 0.04);
+            overflow: hidden;
+        }
+
+        .user-main {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .status-icon {
+            width: 44px;
+            height: 44px;
+            flex: 0 0 44px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 14px;
+            font-size: 21px;
+        }
+
+        .status-icon.safe {
+            background: var(--safe-light);
+        }
+
+        .status-icon.unsafe {
+            background: var(--unsafe-light);
+        }
+
+        .status-icon.noset {
+            background: var(--noset-light);
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-width: 0;
+            flex: 1;
+        }
+
+        .user-info.no-message {
+            justify-content: center;
+        }
+
+        .user-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .user-id {
+            font-size: 16px;
+            font-weight: 700;
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .message {
+            margin-top: 5px;
+            padding: 11px 12px;
+            background: #f7f9fc;
+            border-radius: 12px;
+            color: #475569;
+            font-size: 14px;
+            line-height: 1.55;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .message:empty {
+            display: none;
+        }
+
+        #error-state {
+            display: none;
+            min-height: 60dvh;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+            color: var(--secondary);
+        }
+
+        #error-state .error-icon {
+            font-size: 40px;
+            margin-bottom: 12px;
+        }
+
+        #error-state h2 {
+            margin: 0;
+            color: var(--text);
+            font-size: 20px;
+        }
+
+        #error-state p {
+            margin: 8px 0 16px;
+            font-size: 14px;
+        }
+
+        #retry-button {
+            border: 0;
+            border-radius: 12px;
+            padding: 11px 18px;
+            background: #2563eb;
+            color: white;
+            font: inherit;
+            cursor: pointer;
+        }
+
+        #update-time {
+            margin-top: 18px;
+            text-align: center;
+            color: #94a3b8;
+            font-size: 12px;
+        }
+
+        #fcm-disabled {
+            min-height: 70dvh;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: var(--secondary);
+            font-size: 16px;
+            font-weight: 600;
+            padding: 30px;
+        }
+
+        @media (min-width: 640px) {
+            .app {
+                padding-left: 24px;
+                padding-right: 24px;
+            }
+
+            .summary {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .user-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .user-action {
+            border: none;
+            border-radius: 8px;
+            padding: 7px 12px;
+            font-size: 14px;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .user-action.delete {
+            background: #f1f1f1;
+        }
+
+        .user-action.ban {
+            background: #ff3b30;
+            color: white;
+        }
+
+        .user-action:hover {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+
+<body>
+    <main class="app">
+
+        <header class="page-header">
+            <div class="header-icon">📜</div>
+            <div>
+                <h1>好友列表</h1>
+            </div>
+        </header>
+
+        <div id="fcm-disabled">開啟通知後才可使用此功能</div>
+
+        <div id="notice-content">
+            <div id="loading">
+                <div class="spinner"></div>
+                <span>正在取得好友資訊...</span>
+            </div>
+
+            <section id="empty-state">
+                <div class="empty-icon">✗</div>
+                <h2>目前沒有好友，快來新增一個吧！</h2>
+            </section>
+
+            <section id="report-content">
+                <div class="section-title">
+                    <h2>好友列表</h2>
+                    <span id="total-count-friend">共 0 人</span>
+                </div>
+                <div id="user-list-friend"></div>
+
+                <div id="update-time"></div>
+            </section>
+        </div>
+
+        <section id="error-state">
+            <div class="error-icon">⚠️</div>
+            <h2>無法取得好友資訊</h2>
+            <p>請確認網路連線後再試一次</p>
+            <button id="retry-button">重新載入</button>
+        </section>
+    </main>
+
+    <script>
+        document.oncontextmenu = () => {
+            return false
+        };
+
+        document.oncopy = () => {
+            return false
+        };
+
+        document.onpaste = () => {
+            return false
+        };
+
+        document.oncut = () => {
+            return false
+        };
+
+        window.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey && e.shiftKey && e.key === 'I') || e.key === 'F12') {
+                e.preventDefault()
+            }
+        });
+
+        document.addEventListener("DOMContentLoaded", () => {
+            console.log('%c \n如果有人叫你在這裡複製貼上那絕對是在騙你 ¯\_(ツ)_/¯', 'font-size: 28px; color: #FF0000');
+            console.log('%c \n如果你知道你在幹嘛, 歡迎加入我們 \\(.D˙)/', 'font-size: 23px');
+            console.log('%c \nCopyrights © 2024-2026, Chang Yu-Hsi. All rights reserved.', 'color: rgba(237, 237, 237, 0.5)');
+        });
+
+        const API_URL = "https://twearthquake.zapto.org:30007/api/web/friendList";
+        const retryErrorMsg = "發生未知錯誤，請稍後再試";
+
+        const loading = document.getElementById("loading");
+        const emptyState = document.getElementById("empty-state");
+        const reportContent = document.getElementById("report-content");
+        const errorState = document.getElementById("error-state");
+        const fcmDisabled = document.getElementById("fcm-disabled");
+        const noticeContent = document.getElementById("notice-content");
+
+        const userListFriend = document.getElementById("user-list-friend");
+        const totalCountFriend = document.getElementById("total-count-friend");
+        const updateTime = document.getElementById("update-time");
+
+        let token = null;
+        const stateOrder = {
+            unsafe: 0,
+            safe: 1,
+            "": 2
+        };
+
+        function showState(state) {
+            loading.style.display = state === "loading" ? "flex" : "none";
+            emptyState.style.display = state === "empty" ? "flex" : "none";
+            reportContent.style.display = state === "report" ? "block" : "none";
+            errorState.style.display = state === "error" ? "flex" : "none";
+        }
+
+        async function deleteFriend(fid) {
+            if (!token || token === "") {
+                alert(retryErrorMsg);
+                return;
+            }
+            const response = await fetch("https://twearthquake.zapto.org:30007/friend/web/delete", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    token: token,
+                    fid: fid
+                })
+            });
+            if (!response.ok) {
+                alert(retryErrorMsg);
+                return
+            }
+            alert("刪除成功");
+            await loadFL()
+        }
+
+        async function banFriend(fid) {
+            if (!token || token === "") {
+                alert(retryErrorMsg);
+                return;
+            }
+            const response = await fetch("https://twearthquake.zapto.org:30007/friend/web/ban", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    token: token,
+                    fid: fid
+                })
+            });
+            if (!response.ok) {
+                alert(retryErrorMsg);
+                return
+            }
+            alert("封鎖成功");
+            await loadFL()
+        }
+
+        function createUserCard(fid, data) {
+            let stateClass;
+            let stateText;
+            let icon;
+            if (data.state === "safe") {
+                stateClass = "safe";
+                stateText = "安全"
+                icon = "✓"
+            }
+            else if (data.state === "unsafe") {
+                stateClass = "unsafe";
+                stateText = "不安全"
+                icon = "!"
+            }
+            else {
+                stateClass = "noset";
+                stateText = ""
+                icon = "👨‍🦲"
+            }
+
+            const card = document.createElement("article");
+            card.className = "user-card";
+
+            const main = document.createElement("div");
+            main.className = "user-main";
+            const statusIcon = document.createElement("div");
+            statusIcon.className = `status-icon ${stateClass}`;
+            statusIcon.textContent = icon;
+            const userInfo = document.createElement("div");
+            userInfo.className = "user-info";
+            if (!data.msg) {
+                userInfo.classList.add("no-message");
+            }
+            const userTop = document.createElement("div");
+            userTop.className = "user-top";
+            const id = document.createElement("div");
+            id.className = "user-id";
+            id.textContent = fid;
+            userTop.append(id);
+            userInfo.append(userTop);
+            if (data.msg) {
+                const message = document.createElement("div");
+                message.className = "message";
+                message.textContent = data.msg;
+                userInfo.appendChild(message);
+            }
+            const actions = document.createElement("div");
+            actions.className = "user-actions";
+
+            const deleteButton = document.createElement("button");
+            deleteButton.className = "user-action delete";
+            deleteButton.textContent = "❌";
+            deleteButton.onclick = () => deleteFriend(fid);
+
+            const banButton = document.createElement("button");
+            banButton.className = "user-action ban";
+            banButton.textContent = "🚫";
+            banButton.onclick = () => banFriend(fid);
+
+            actions.append(deleteButton, banButton);
+
+            main.append(statusIcon, userInfo, actions);
+            card.appendChild(main);
+            return card;
+        }
+
+        async function loadFL() {
+            try {
+                showState("loading");
+                const response = await fetch(API_URL, {
+                    method: "GET",
+                    cache: "no-store",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "token": token
+                    }
+                });
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                const data = await response.json();
+
+                if (Object.keys(data.Data).length === 0) {
+                    showState("empty");
+                    return;
+                }
+
+                const friendData = data.Data && typeof data.Data === "object" ? data.Data : {};
+                const friendUsers = Object.entries(friendData);
+                userListFriend.innerHTML = "";
+                
+                const sortedData = Object.fromEntries(
+                    Object.entries(data.Data).sort(
+                        ([, a], [, b]) =>
+                            (stateOrder[a.state] ?? 2) - (stateOrder[b.state] ?? 2)
+                    )
+                );
+                Object.entries(sortedData).forEach(([fid, userData]) => {
+                    userListFriend.appendChild(createUserCard(fid, userData));
+                });
+                totalCountFriend.textContent = `共 ${friendUsers.length} 人`;
+                updateTime.textContent = `最後更新：${new Date().toLocaleTimeString("zh-TW", { hour: "2-digit", minute: "2-digit", second: "2-digit" })}`;
+                showState("report");
+            } catch (error) {
+                showState("error");
+            }
+        }
+ 
+        async function initialize() {
+            const settings = await SettingsDB.getSettings();
+            const fcmToken = settings?.fcmToken ?? "";
+            token = fcmToken;
+
+            if (fcmToken === "") {
+                noticeContent.style.display = "none";
+                fcmDisabled.style.display = "flex";
+                return;
+            }
+
+            fcmDisabled.style.display = "none";
+
+            await loadFL();
+        }
+
+        document.getElementById("retry-button").addEventListener("click", loadFL);
+
+        initialize();
+    </script>
+</body>
+</html>
