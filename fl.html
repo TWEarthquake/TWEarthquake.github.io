@@ -160,87 +160,6 @@
             display: none;
         }
 
-        .event-card {
-            background:
-                linear-gradient(
-                    135deg,
-                    rgba(255, 255, 255, 0.98),
-                    rgba(245, 248, 252, 0.95)
-                );
-            border: 1px solid var(--border);
-            border-radius: 22px;
-            padding: 10px;
-            box-shadow: 0 8px 30px rgba(30, 41, 59, 0.07);
-            margin-bottom: 16px;
-        }
-
-        .event-label {
-            display: flex;
-            align-items: center;
-            gap: 7px;
-            color: #b45309;
-            font-size: 13px;
-            font-weight: 700;
-            margin-bottom: 9px;
-        }
-
-        .event-label::before {
-            content: "";
-            width: 8px;
-            height: 8px;
-            background: #f59e0b;
-            border-radius: 50%;
-            box-shadow: 0 0 0 5px rgba(245, 158, 11, 0.12);
-        }
-
-        #event-title {
-            margin: 0;
-            font-size: clamp(21px, 6vw, 26px);
-            line-height: 1.35;
-            letter-spacing: -0.4px;
-            word-break: break-word;
-        }
-
-        #event-sub-title {
-            color: gray;
-        }
-
-        .summary {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 10px;
-            margin-bottom: 20px;
-            border-top: 2px solid gray;
-            padding-top: 10px;
-        }
-
-        .summary-card {
-            background: white;
-            border: 1px solid var(--border);
-            border-radius: 17px;
-            padding: 15px;
-        }
-
-        .summary-card .label {
-            color: var(--secondary);
-            font-size: 13px;
-            margin-bottom: 5px;
-        }
-
-        .summary-card .number {
-            font-size: 26px;
-            font-weight: 750;
-            letter-spacing: -0.5px;
-        }
-
-        .summary-card.safe .number {
-            color: var(--safe);
-        }
-
-        .summary-card.unsafe .number {
-            color: var(--unsafe);
-        }
-
         .section-title {
             display: flex;
             align-items: center;
@@ -303,10 +222,6 @@
             justify-content: center;
             min-width: 0;
             flex: 1;
-        }
-
-        .user-info.no-message {
-            justify-content: center;
         }
 
         .user-top {
@@ -401,10 +316,6 @@
                 padding-left: 24px;
                 padding-right: 24px;
             }
-
-            .summary {
-                grid-template-columns: repeat(2, 1fr);
-            }
         }
 
         .user-actions {
@@ -427,7 +338,7 @@
         }
 
         .user-action.ban {
-            background: #ff3b30;
+            background: #f1f1f1;
             color: white;
         }
 
