@@ -782,7 +782,7 @@
             const value = myIdInput.value;
             const isNotAllow = value.length < 6;
 
-            idHint.textContent = isNotAllow ? "需大於6個字元" : "";
+            idHint.style.display = isNotAllow ? "block" : "none";
             setIdButton.disabled = isNotAllow ? true : false;
             setIdButton.style.background = isNotAllow ? 'gray' : '#2563eb';
             setIdButton.style.cursor = isNotAllow ? 'not-allowed' : 'pointer';
