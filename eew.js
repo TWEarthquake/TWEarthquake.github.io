@@ -231,12 +231,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     });
 
-    const isStandalone = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
-    if (isStandalone && Notification.permission !== "granted") {
-        document.getElementById("notificationButton").style.display = "block"
-        alert("請點擊畫面下方的「開啟通知」，以確保能即時收到地震通知。")
-    }
-
     document.getElementById('sub-eew-button').addEventListener("click", function () {
         toggleSubscribe(this, 'eew')
     });
@@ -249,6 +243,17 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.getElementById('sub-tsu-button').addEventListener("click", function () {
         toggleSubscribe(this, 'tsu')
     });
+
+    const isStandalone = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
+    if (isStandalone) {
+        if (Notification.permission !== "granted") {
+            document.getElementById("notificationButton").style.display = "block";
+            alert("請點擊畫面下方的「開啟通知」，以確保能即時收到地震通知。");
+        }
+        else if (Notification.permission === "granted") {
+            document.getElementById("enabledNotification").style.display = "block"
+        }
+    }
 });
 
 function splitStringAndNumber(value) {
