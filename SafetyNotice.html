@@ -573,6 +573,57 @@
             cursor: not-allowed;
             background-color: gray;
         }
+
+        .mode-settings {
+            display: flex; 
+            justify-content: flex-start; 
+            flex-direction: column; 
+            gap: 5px;
+        }
+
+        .mode-setting {
+            display: flex; 
+            align-items: center; 
+            gap: 5px;
+        }
+
+        input[type=checkbox] {
+            height: 0;
+            width: 0;
+            visibility: hidden;
+            display: none;
+        }
+
+        label {
+            cursor: pointer;
+            width: 50px;
+            height: 25px;
+            background: grey;
+            display: block;
+            border-radius: 100px;
+            position: relative;
+        }
+
+        label:after {
+            content: '';
+            position: absolute;
+            top: 2.5px;
+            left: 2.5px;
+            width: 20px;
+            height: 20px;
+            background: #fff;
+            border-radius: 90px;
+            transition: 0.3s;
+        }
+
+        input:checked + label {
+            background: #42c15b;;
+        }
+
+        input:checked + label:after {
+            left: calc(100% - 5px);
+            transform: translateX(-100%);
+        }
     </style>
 </head>
 
@@ -649,6 +700,20 @@
                     </div>
                 </div>
 
+                <section class="mode-settings">
+                    <span id="globalMsg" class="id-hint" style="display: none;">已開啟公開模式，您的狀態將顯示給所有使用者，即使對方尚未成為您的好友。請勿發表任何違反善良風俗、敏感或私密資訊之言論。</span>
+                    <div class="mode-setting">
+                        <input type="checkbox" id="globalSwitch" />
+                        <label for="globalSwitch"></label>
+                        <span>向所有人公開</span>
+                    </div>
+                    <!-- <div class="mode-setting">
+                        <input type="checkbox" id="locationSwitch" />
+                        <label for="locationSwitch"></label>
+                        <p>1232</p>
+                    </div> -->
+                </section>
+
                 <button id="report-button" class="report-button input-button" disabled>
                     回報
                 </button>
@@ -711,7 +776,7 @@
         });
 
         document.addEventListener("DOMContentLoaded", () => {
-            console.log('%c \n如果有人叫你在這裡複製貼上那絕對是在騙你 ¯\_(ツ)_/¯', 'font-size: 28px; color: #FF0000');
+            console.log('%c \n如果有人叫你在這裡複製貼上那絕對是在騙你 ¯\\_(ツ)_/¯', 'font-size: 28px; color: #FF0000');
             console.log('%c \n如果你知道你在幹嘛, 歡迎加入我們 \\(.D˙)/', 'font-size: 23px');
             console.log('%c \nCopyrights © 2024-2026, Chang Yu-Hsi. All rights reserved.', 'color: rgba(237, 237, 237, 0.5)');
         });
@@ -744,6 +809,7 @@
         const updateTime = document.getElementById("update-time");
         const reportMessage = document.getElementById("report-message");
         const messageCount = document.getElementById("message-count");
+        const globalSwitch = document.getElementById("globalSwitch");
         const reportButton = document.getElementById("report-button");
 
         let token = null;
@@ -1028,6 +1094,14 @@
         document.getElementById("retry-button").addEventListener("click", loadSN);
         reportMessage.addEventListener("input", () => {
             messageCount.textContent = reportMessage.value.length;
+        });
+        globalSwitch.addEventListener('change', (event) => {
+            if (event.target.checked) {
+                document.getElementById('globalMsg').style.display = 'block';
+            } 
+            else {
+                document.getElementById('globalMsg').style.display = 'none';
+            }
         });
 
         initialize();
