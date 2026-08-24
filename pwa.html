@@ -381,9 +381,7 @@
             document.getElementById('sub-report-button').className = data.state[1] == 'True' ? 'unsub-button' : 'sub-button';
             document.getElementById('sub-tsu-button').className = data.state[3] == 'True' ? 'unsub-button' : 'sub-button';
 
-			if (data.state[4] && data.state[4] !== "") {
-                await SettingsDB.setFID(data.state[4]);
-            }
+			await SettingsDB.setFID(data.state[4] ? data.state[4] : "");
         }, 500);
     };
 
