@@ -14,21 +14,6 @@ firebase.initializeApp({
 
 const messaging = firebase.messaging();
 
-messaging.onMessage(function(payload) {
-  const msgTitle = payload.data.title;
-  const url = payload.data.click_action || "/pwa";
-
-  const notification = new Notification(msgTitle, {
-    body: payload.data.body,
-    icon: "./f256x256.png"
-  });
-
-  notification.onclick = function(e) {
-    e.preventDefault();
-    window.open(url, "_blank");
-  };
-});
-
 self.addEventListener("notificationclick", function(event) {
   event.notification.close();
 
