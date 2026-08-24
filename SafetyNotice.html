@@ -346,7 +346,7 @@
         }
 
         .message {
-            margin-top: 13px;
+            margin-top: 10px;
             padding: 11px 12px;
             background: #f7f9fc;
             border-radius: 12px;
@@ -940,17 +940,33 @@
                 alert("請選擇「安全」或「有影響」");
                 return;
             }
-            const response = await fetch("https://twearthquake.zapto.org:30007/set/sn", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    TOKEN: token,
-                    SNState: selectedSNState,
-                    SNMsg: reportMessage.value
-                })
-            });
+            let response = null;
+            if (globalSwitch.checked) {
+                response = await fetch("https://twearthquake.zapto.org:30007/set/gsn", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        FID: fid,
+                        SNState: selectedSNState,
+                        SNMsg: reportMessage.value
+                    })
+                });
+            }
+            else {
+                response = await fetch("https://twearthquake.zapto.org:30007/set/sn", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        TOKEN: token,
+                        SNState: selectedSNState,
+                        SNMsg: reportMessage.value
+                    })
+                });
+            }
             if (!response.ok) {
                 alert(retryErrorMsg);
                 return
