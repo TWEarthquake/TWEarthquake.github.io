@@ -1121,6 +1121,25 @@
         });
 
         initialize();
+        
+        window.addEventListener("pageshow", async (event) => {
+            if (event.persisted) {
+                const settings = await SettingsDB.getSettings();
+                const fid = settings?.fid ?? "";
+
+                if (fid === "") {
+                    myIdInput.value = "";
+                    addFriendRow.style.display = "none";
+                } else {
+                    myIdInput.value = fid;
+                    myIdInput.disabled = true;
+                    addFriendRow.style.display = "flex";
+                    setIdButton.style.display = "none";
+                    idHint.remove();
+                    tipHint.remove();
+                }
+            }
+        });
     </script>
 </body>
 </html>
