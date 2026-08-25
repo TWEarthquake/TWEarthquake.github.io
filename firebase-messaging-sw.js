@@ -45,6 +45,10 @@ async function handleBackgroundMessage(data) {
 		0: "0 級", 1: "1 級", 2: "2 級", 3: "3 級", 4: "4 級",
 		5: "5 弱", 6: "5 強", 7: "6 弱", 8: "6 強", 9: "7 級"
 	};
+	const levelToNum = {
+		'0 級': 0, '1 級': 1, '2 級': 2, '3 級': 3, '4 級': 4,
+        '5 弱': 5, '5 強': 6, '6 弱': 7, '6 強': 8, '7 級': 9
+	};
 
 	if (data.type === "eew") {
 		try {
@@ -53,7 +57,7 @@ async function handleBackgroundMessage(data) {
             const location = settings.location;
             const alertLevel = settings.alertLevel;
 
-			if (alertLevel > data.maxLevel) { return; }
+			if (alertLevel > levelToNum[data.maxLevel]) { return; }
 
 			const response = await fetch(`https://twearthquake.zapto.org:30009/api/web/location/${location}`);
 			if (response.ok) {
