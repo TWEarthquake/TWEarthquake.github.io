@@ -365,7 +365,7 @@
         if (!currentToken) { return; }
         userToken = currentToken;
         const settings = await SettingsDB.getSettings();
-        if (settings?.fcmToken ?? "" === "") { await SettingsDB.setFCMToken(currentToken); }
+        if ((settings?.fcmToken ?? "") === "") { await SettingsDB.setFCMToken(currentToken); }
         setTimeout(async () => {
             const response = await fetch(subUrl, {
                 method: "POST",
