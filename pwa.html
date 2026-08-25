@@ -364,7 +364,8 @@
         });
         if (!currentToken) { return; }
         userToken = currentToken;
-        await SettingsDB.setFCMToken(currentToken);
+        const settings = await SettingsDB.getSettings();
+        if (settings?.fcmToken ?? "" === "") { await SettingsDB.setFCMToken(currentToken); }
         setTimeout(async () => {
             const response = await fetch(subUrl, {
                 method: "POST",
