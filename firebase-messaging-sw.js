@@ -53,7 +53,7 @@ async function handleBackgroundMessage(data) {
             const location = settings.location;
             const alertLevel = settings.alertLevel;
 
-			const response = await fetch(`https://twearthquake.zapto.org:30007/api/web/location/${location}`);
+			const response = await fetch(`https://twearthquake.zapto.org:30009/api/web/location/${location}`);
 			if (response.ok) {
                 const result = await response.json();
 				if (Number.isFinite(result.level) && alertLevel > result.level) { return; }
