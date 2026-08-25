@@ -802,7 +802,7 @@ setInterval(() => {
         document.getElementById('connectStats').innerText = `● 未連線`;
         connectStats.style.color = 'red';
     });
-}, 1500);
+}, 3000);
 
 async function playSound(file) {
     if (!muteMode) {
