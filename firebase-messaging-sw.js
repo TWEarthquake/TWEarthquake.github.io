@@ -1,4 +1,5 @@
 importScripts("/db.js");
+importScripts("/location.js");
 importScripts("https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js");
 importScripts("https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging-compat.js");
 
@@ -53,19 +54,20 @@ async function handleBackgroundMessage(data) {
 	if (data.type === "eew") {
 		try {
 			const settings = await SettingsDB.getSettings();
-
             const location = settings.location;
             const alertLevel = settings.alertLevel;
 
 			if (alertLevel > levelToNum[data.maxLevel]) { return; }
 
-			const response = await fetch(`https://twearthquake.zapto.org:30009/api/web/location/${location}`);
-			if (response.ok) {
-                const result = await response.json();
-				if (Number.isFinite(result.level) && alertLevel > result.level) { return; }
+			const [latitude, longitude, dPGA] = getLocationInfo(location);
+			const distance = getDistance(latitude, longitude, Number(data.lat), Number(data.lon))
+			const localLevel = getLocationLevel(distance, dPGA, Number(data.de), Number(data.ma))
 
-				body = `〚${numToLevel[result.level]}〛地震，〚${result.second}秒〛後抵達\n慎防強烈搖晃，就近避難「趴下、掩護、穩住」。Beware of strong shaking, seek cover nearby "DROP, COVER, HOLD ON"`
-			}
+			if (alertLevel > levelToNum[localLevel]) { return; }
+
+			const arriveTime = getTimeTo(distance, Number(data.pd))
+
+			body = `〚${localLevel}〛地震，〚${arriveTime}秒〛後抵達\n慎防強烈搖晃，就近避難「趴下、掩護、穩住」。Beware of strong shaking, seek cover nearby "DROP, COVER, HOLD ON"`
 		}
 		catch (e) { }
 	}
@@ -77,3 +79,56 @@ async function handleBackgroundMessage(data) {
         }
     });
 }
+
+function getLocationInfo(location) {
+    const match = location.match(/^(.+?)(\d+)?$/);
+
+    if (!match) { return null; }
+
+    const city = match[1];
+    const index = match[2] ? parseInt(match[2], 10) : 0;
+
+    if (!locationAndTowns[city]) { return null; }
+
+    const towns = Object.values(locationAndTowns[city]);
+
+    if (index < 0 || index >= towns.length) { return null; }
+
+    return towns[index];
+}
+
+function getDistance(lat1, lon1, lat2, lon2) {
+    const rad = Math.PI / 180.0;
+
+    const dLat = (lat2 - lat1) * rad;
+    const dLon = (lon2 - lon1) * rad;
+
+    const lat1Rad = lat1 * rad;
+    const lat2Rad = lat2 * rad;
+
+    const a = Math.sin(dLat / 2) ** 2 + Math.sin(dLon / 2) ** 2 * Math.cos(lat1Rad) * Math.cos(lat2Rad);
+
+    return 12742 * Math.asin(Math.sqrt(a))
+}
+
+function getLocationLevel(distance, dPGA, deep, mag) {
+    const point = Math.hypot(deep, distance);
+    const PGA = 1.657 * Math.exp(1.533 * mag) * point ** -1.607 * dPGA;
+
+    const levels = [
+        [800, "7 級"],
+        [440, "6 強"],
+        [250, "6 弱"],
+        [140, "5 強"],
+        [80,  "5 弱"],
+        [25,  "4 級"],
+        [8,   "3 級"],
+        [2.5, "2 級"],
+        [0.8, "1 級"],
+        [0,   "0 級"]
+    ];
+
+    return levels.find(([threshold]) => PGA >= threshold)[1];
+}
+
+const getTimeTo = (distance, pd) => distance <= pd ? 0 : Math.min(Math.floor((distance - pd) / 3.5), 99);
