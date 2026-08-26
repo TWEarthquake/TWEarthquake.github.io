@@ -1,4 +1,4 @@
-﻿const locationAndTowns = {
+﻿globalThis.locationAndTowns = {
 	"Keelung": {
 	    "中正區": [25.1407924, 121.7592534, 1.077],
 	    "七堵區": [25.0976530, 121.7165013, 1.866],
