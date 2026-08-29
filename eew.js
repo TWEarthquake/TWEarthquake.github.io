@@ -126,7 +126,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     document.getElementById('updateNotiSelect').addEventListener("change", async (e) => {
         const value = e.target.value;
-        await SettingsDB.setUpdateNoti(value === 'yes' ? true : no)
+        await SettingsDB.setUpdateNoti(value === 'yes' ? true : false)
     });
 
     document.getElementById('volumeSlider').addEventListener('input', (e) => {
