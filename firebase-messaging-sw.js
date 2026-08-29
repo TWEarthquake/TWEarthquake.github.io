@@ -57,6 +57,7 @@ async function handleBackgroundMessage(data) {
             const location = settings.location;
             const alertLevel = settings.alertLevel;
 
+			if (data.count != "1" && !settings.updateNoti) { return; }
 			if (alertLevel > levelToNum[data.maxLevel]) { return; }
 
 			const [latitude, longitude, dPGA] = getLocationInfo(location);
