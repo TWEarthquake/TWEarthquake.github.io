@@ -8,7 +8,8 @@ globalThis.SettingsDB = (() => {
         location: "Taipei",
         alertLevel: 0,
         fcmToken: "",
-        fid: ""
+        fid: "",
+        updateNoti: true
     });
 
     let dbPromise = null;
@@ -63,7 +64,11 @@ globalThis.SettingsDB = (() => {
             ? data.fid.trim()
             : DEFAULT_SETTINGS.fid;
 
-        return { location, alertLevel, fcmToken, fid };
+        const updateNoti = typeof data.updateNoti === "boolean"
+            ? data.updateNoti
+            : DEFAULT_SETTINGS.updateNoti;
+
+        return { location, alertLevel, fcmToken, fid, updateNoti };
     }
 
     async function readRawSettings() {
@@ -106,7 +111,8 @@ globalThis.SettingsDB = (() => {
             raw.location !== normalized.location ||
             raw.alertLevel !== normalized.alertLevel ||
             raw.fcmToken !== normalized.fcmToken ||
-            raw.fid !== normalized.fid
+            raw.fid !== normalized.fid ||
+            raw.updateNoti !== normalized.updateNoti
         ) {
             await writeSettings(normalized);
         }
@@ -141,7 +147,7 @@ globalThis.SettingsDB = (() => {
             throw new TypeError("alertLevel 必須為大於或等於 0 的整數");
         }
 
-        return updateSettings({ alertLevel: alertLevel });
+        return updateSettings({ alertLevel });
     }
 
     async function setFCMToken(fcmToken) {
@@ -161,6 +167,16 @@ globalThis.SettingsDB = (() => {
 
         return updateSettings({
             fid: fid.trim()
+        });
+    }
+
+    async function setUpdateNoti(updateNoti) {
+        if (typeof updateNoti !== "boolean") {
+            throw new TypeError("updateNoti 必須為 boolean");
+        }
+
+        return updateSettings({
+            updateNoti
         });
     }
 
@@ -187,6 +203,7 @@ globalThis.SettingsDB = (() => {
         setAlertLevel,
         setFCMToken,
         setFID,
+        setUpdateNoti,
         resetSettings,
         clearSettings,
         DEFAULT_SETTINGS
