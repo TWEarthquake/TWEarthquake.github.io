@@ -44,6 +44,8 @@ async function loadSettings() {
     const townSelectElement = document.getElementById('townSelect');
     document.getElementById("alertLevelSelect").value = String(settings.alertLevel);
     document.getElementById('citySelect').value = splitStringAndNumber(settings.location).text
+    document.getElementById('updateNotiSelect').value = settings.updateNoti ? 'yes' : 'no'
+
     townSelectElement.innerHTML = '';
     const towns = Object.keys(locationAndTowns[locationEng]);
 
@@ -120,6 +122,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         alertLevel = parseInt(e.target.value, 10);
         settings.alertLevel = alertLevel
         await SettingsDB.setAlertLevel(alertLevel);
+    });
+
+    document.getElementById('updateNotiSelect').addEventListener("change", async (e) => {
+        const value = e.target.value;
+        await SettingsDB.setUpdateNoti(value === 'yes' ? true : no)
     });
 
     document.getElementById('volumeSlider').addEventListener('input', (e) => {
