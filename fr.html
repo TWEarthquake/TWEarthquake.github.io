@@ -407,7 +407,7 @@
             console.log('%c \nCopyrights © 2024-2026, Chang Yu-Hsi. All rights reserved.', 'color: rgba(237, 237, 237, 0.5)');
         });
 
-        const API_URL = "https://twearthquake.zapto.org:30007/api/web/friendRequestList";
+        const API_URL = "https://twearthquake.com/api/web/friendRequestList";
         const retryErrorMsg = "發生未知錯誤，請稍後再試";
 
         const loading = document.getElementById("loading");
@@ -435,7 +435,7 @@
                 alert(retryErrorMsg);
                 return;
             }
-            const response = await fetch("https://twearthquake.zapto.org:30007/friendRequest/web/accept", {
+            const response = await fetch("https://twearthquake.com/friendRequest/web/accept", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -458,7 +458,7 @@
                 alert(retryErrorMsg);
                 return;
             }
-            const response = await fetch("https://twearthquake.zapto.org:30007/friendRequest/web/delete", {
+            const response = await fetch("https://twearthquake.com/friendRequest/web/delete", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -481,7 +481,7 @@
                 alert(retryErrorMsg);
                 return;
             }
-            const response = await fetch("https://twearthquake.zapto.org:30007/friendRequest/web/ban", {
+            const response = await fetch("https://twearthquake.com/friendRequest/web/ban", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
