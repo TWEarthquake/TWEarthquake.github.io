@@ -393,7 +393,7 @@
             document.getElementById('sub-tsu-button').className = data.state[3] == 'True' ? 'unsub-button' : 'sub-button';
 
 			//await SettingsDB.setFID(data.state[4] ? data.state[4] : "");
-        }, 500);
+        }, 1000);
     };
 
     document.getElementById("notificationButton").addEventListener("click", async () => {
