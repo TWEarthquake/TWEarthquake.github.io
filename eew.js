@@ -94,7 +94,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             taiwanGeoJSON = data;
             setTimeout(() => {
                 updateColor(eqData);
-            }, 500);
+            }, 1000);
         })
     .catch(e => {});
     
