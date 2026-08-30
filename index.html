@@ -374,7 +374,7 @@
         });
         if (!currentToken) { return; }
         userToken = currentToken;
-        await SettingsDB.setFCMToken(currentToken);
+        if (settings?.fcmToken ?? "" === "") { await SettingsDB.setFCMToken(currentToken); }
         setTimeout(async () => {
             const response = await fetch(subUrl, {
                 method: "POST",
@@ -392,8 +392,8 @@
             document.getElementById('sub-report-button').className = data.state[1] == 'True' ? 'unsub-button' : 'sub-button';
             document.getElementById('sub-tsu-button').className = data.state[3] == 'True' ? 'unsub-button' : 'sub-button';
 
-            await SettingsDB.setFID(data.state[4] ? data.state[4] : "");
-        }, 500);
+            //await SettingsDB.setFID(data.state[4] ? data.state[4] : "");
+        }, 1000);
     };
 
     document.getElementById("notificationButton").addEventListener("click", async () => {
