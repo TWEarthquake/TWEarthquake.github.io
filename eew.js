@@ -64,7 +64,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.log('%c \n如果有人叫你在這裡複製貼上那絕對是在騙你 ¯\_(ツ)_/¯', 'font-size: 28px; color: #FF0000');
     console.log('%c \n如果你知道你在幹嘛, 歡迎加入我們 \\(.D˙)/', 'font-size: 23px');
     console.log('%c \nCopyrights © 2024-2026, Chang Yu-Hsi. All rights reserved.', 'color: rgba(237, 237, 237, 0.5)');
-    fetch('https://twearthquake.zapto.org:30007/api/web/initialization')
+    fetch('https://twearthquake.com/api/web/initialization')
         .then(response => response.json())
         .then(data => {
             hasInit = true;
@@ -431,7 +431,7 @@ let hasTsunami = false;
 setInterval(() => {
     if (!hasInit) return;
     const townSelectElement = document.getElementById('townSelect');
-    fetchWithTimeout(apiUrl + `/${locationEng}${townSelectElement.value}`, 1000)
+    fetchWithTimeout(apiUrl + `/${locationEng}${townSelectElement.value}`, 1500)
     .then(({data, responseTime}) => {
         if (shouldPlayAlert) {
             document.getElementById('connectStats').innerText = `● 已連線 (${parseFloat(responseTime.toFixed(2))} ms)`;
@@ -899,7 +899,7 @@ function replay() {
             replayButton.style.width = '80px';
             
             const townSelectElement = document.getElementById('townSelect');
-            fetchWithTimeout(apiUrl + `replay/${locationEng}${townSelectElement.value}`, 1000)
+            fetchWithTimeout(apiUrl + `replay/${locationEng}${townSelectElement.value}`, 1500)
             .then(({data, _ }) => {
                 const earthquake = data.Earthquake;
                 // Edit UI
