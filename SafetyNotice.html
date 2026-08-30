@@ -781,7 +781,7 @@
             console.log('%c \nCopyrights © 2024-2026, Chang Yu-Hsi. All rights reserved.', 'color: rgba(237, 237, 237, 0.5)');
         });
 
-        const API_URL = "https://twearthquake.zapto.org:30007/api/web/sn";
+        const API_URL = "https://twearthquake.com/api/web/sn";
         const retryErrorMsg = "發生未知錯誤，請稍後再試";
 
         const loading = document.getElementById("loading");
@@ -861,7 +861,7 @@
                 return;
             }
             
-            const response = await fetch("https://twearthquake.zapto.org:30007/set/web/fid", {
+            const response = await fetch("https://twearthquake.com/set/web/fid", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -906,7 +906,7 @@
                 return;
             }
 
-            const response = await fetch("https://twearthquake.zapto.org:30007/friend/web/add", {
+            const response = await fetch("https://twearthquake.com/friend/web/add", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -942,7 +942,7 @@
             }
             let response = null;
             if (globalSwitch.checked) {
-                response = await fetch("https://twearthquake.zapto.org:30007/set/gsn", {
+                response = await fetch("https://twearthquake.com/set/gsn", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -955,7 +955,7 @@
                 });
             }
             else {
-                response = await fetch("https://twearthquake.zapto.org:30007/set/sn", {
+                response = await fetch("https://twearthquake.com/set/sn", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
