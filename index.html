@@ -376,14 +376,22 @@
         userToken = currentToken;
 		const settings = await SettingsDB.getSettings();
         if (settings?.fcmToken ?? "" === "") { await SettingsDB.setFCMToken(currentToken); }
-        setTimeout(async () => {
-            const response = await fetch(subUrl, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ token: currentToken, type: 'eew' })
-            });
-            const data = await response.json();
-            document.getElementById('sub-eew-button').innerText = data.state[0] == 'True' ? '取消訂閱' : '訂閱';
+        
+		const waitForSubUrl = async () => {
+		    if (subUrl === '') {
+		        setTimeout(waitForSubUrl, 100);
+		        return;
+		    }
+		
+		    const response = await fetch(subUrl, {
+		        method: "POST",
+		        headers: { "Content-Type": "application/json" },
+		        body: JSON.stringify({ token: currentToken, type: 'eew' })
+		    });
+		
+		    const data = await response.json();
+		
+		    document.getElementById('sub-eew-button').innerText = data.state[0] == 'True' ? '取消訂閱' : '訂閱';
             document.getElementById('sub-sreport-button').innerText = data.state[2] == 'True' ? '取消訂閱' : '訂閱';
             document.getElementById('sub-report-button').innerText = data.state[1] == 'True' ? '取消訂閱' : '訂閱';
             document.getElementById('sub-tsu-button').innerText = data.state[3] == 'True' ? '取消訂閱' : '訂閱';
@@ -393,8 +401,10 @@
             document.getElementById('sub-report-button').className = data.state[1] == 'True' ? 'unsub-button' : 'sub-button';
             document.getElementById('sub-tsu-button').className = data.state[3] == 'True' ? 'unsub-button' : 'sub-button';
 
-            //await SettingsDB.setFID(data.state[4] ? data.state[4] : "");
-        }, 1000);
+			//await SettingsDB.setFID(data.state[4] ? data.state[4] : "");
+		};
+		
+		waitForSubUrl();
     };
 
     document.getElementById("notificationButton").addEventListener("click", async () => {
